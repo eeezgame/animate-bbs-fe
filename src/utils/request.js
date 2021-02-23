@@ -1,4 +1,5 @@
 import axios from "axios";
+const qs = require("qs");
 
 // create an axios instance
 const service = axios.create({
@@ -11,7 +12,10 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
+    if (config.method === "post") {
+      config.headers["content-type"] = "application/x-www-form-urlencoded";
+      config.data = qs.stringify(config.data);
+    }
     return config;
   },
   error => {
