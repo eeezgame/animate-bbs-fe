@@ -23,7 +23,7 @@
               <td width="48" valign="top" align="center">
                 <a href="/member/Index98"
                   ><img
-                    :src="item.avatar"
+                    :src="$imgURL + item.user.avatar"
                     class=" rounded-sm"
                     border="0"
                     align="default"
@@ -32,16 +32,26 @@
               </td>
               <td width="10"></td>
               <td width="auto" valign="middle">
-                <span class="item_title"
-                  ><a href="/t/749886#reply79" class="topic-link">{{
-                    item.title
-                  }}</a></span
+                <span class="item_title">
+                  <router-link
+                    :to="{ name: 'Post', params: { id: item.id } }"
+                    class="text-gray-800 hover:text-red-500 text-sm"
+                  >
+                    {{
+                      item.adopted === 1
+                        ? `[待采纳][💰${item.adoptedPoints}]`
+                        : item.adopted === 3
+                        ? `[已采纳][💰${item.adoptedPoints}]`
+                        : ""
+                    }}
+                    {{ item.title }}</router-link
+                  ></span
                 >
                 <div class="sep5"></div>
                 <span class="topic_info"
                   ><div class="votes"></div>
                   <strong
-                    ><a href="/member/Index98">{{ item.authorName }}</a></strong
+                    ><a href="/member/Index98">{{ item.user.name }}</a></strong
                   >
                   <!-- <span title="2021-01-31 15:43:58 +08:00">5 分钟前</span>
                   <strong><a href="/member/cmllwxxl">cmllwxxl</a></strong> -->
@@ -96,35 +106,25 @@
 <script>
 import { getUserPost } from "@/api/post";
 
-let plates = new Array(10).fill({
-  time: "Jun 1, 2020",
-  label: "miku",
-  title: "《进击的miku》中日字幕下载",
-  shortContent:
-    "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempora expedita dicta totam aspernatur doloremque. Excepturi iste iusto eos enim reprehenderit nisi, accusamus delectus nihil quis facere in modi ratione libero!",
-  avatar:
-    "https://cdn.v2ex.com/gravatar/40184bd14ed53de97a6e2a665560896b?s=48&d=retro",
-  authorName: "Runki"
-});
 export default {
   data() {
     return {
       plates: [],
       queryParam: {
-        title: "进击的巨人",
+        title: "",
         page: 1,
         limit: 10
       }
     };
   },
   created() {
-    this.plates = plates;
     this.getUserPost();
   },
   methods: {
     getUserPost() {
       getUserPost(this.queryParam).then(res => {
-        console.log(res);
+        const { list } = { ...res.data };
+        this.plates = list;
       });
     }
   }

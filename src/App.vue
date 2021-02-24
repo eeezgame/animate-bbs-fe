@@ -53,6 +53,7 @@
     </main>
     <footer
       class="bg-green-50 text-xs w-full border-solid border-gray-600 border-t p-1 fixed left-0 bottom-0"
+      style="z-index: 1000;"
     >
       <div class="flex items-end">
         <img
