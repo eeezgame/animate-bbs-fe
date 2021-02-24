@@ -38,7 +38,11 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    console.log(response);
+    const res = response.data;
+    if (res.code && ["500", "403"].some(errorCode => errorCode == res.code)) {
+      return Promise.reject(new Error(res.msg || "Error"));
+    }
+    return res;
   },
   error => {
     console.log("err" + error); // for debug

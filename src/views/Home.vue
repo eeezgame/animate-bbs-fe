@@ -2,7 +2,9 @@
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png" /> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-
+    <h1 class="text-center p-6 text-yellow-900 font-extrabold text-5xl">
+      MikuChan233
+    </h1>
     <div class="px-6 py-8">
       <div class="flex justify-between container mx-auto">
         <plate-list></plate-list>

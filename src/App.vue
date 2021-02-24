@@ -5,15 +5,15 @@
       <router-link to="/about">About</router-link>z
     </div> -->
     <nav
-      class="fixed  w-full top-0 left-0 bg-gray-100 hover:bg-miku-100 px-6 shadow"
+      class="fixed z-50 w-full top-0 left-0 bg-gray-100 hover:bg-miku-100 px-6 shadow"
     >
       <div
         class="flex flex-col h-6 container mx-auto md:flex-row md:items-center md:justify-between"
       >
         <div class="flex justify-between items-center">
           <div>
-            <a href="#" class="text-gray-800 hover:text-red-500 text-sm"
-              >首页</a
+            <router-link to="/" class="text-gray-800 hover:text-red-500 text-sm"
+              >首页</router-link
             >
           </div>
           <div>
@@ -30,6 +30,11 @@
           </div>
         </div>
         <div class="md:flex flex-col md:flex-row md:-mx-4 hidden">
+          <router-link
+            to="/send-post"
+            class="my-1 px-2 bg-miku-500 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
+            >发帖</router-link
+          >
           <a
             href="#"
             class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
@@ -43,10 +48,7 @@
         </div>
       </div>
     </nav>
-    <main>
-      <h1 class="text-center mt-6 p-6 text-yellow-900 font-extrabold text-5xl">
-        MikuChan233
-      </h1>
+    <main class=" pt-6">
       <router-view />
     </main>
     <footer

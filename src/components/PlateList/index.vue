@@ -94,6 +94,8 @@
 </template>
 
 <script>
+import { getUserPost } from "@/api/post";
+
 let plates = new Array(10).fill({
   time: "Jun 1, 2020",
   label: "miku",
@@ -107,11 +109,24 @@ let plates = new Array(10).fill({
 export default {
   data() {
     return {
-      plates: []
+      plates: [],
+      queryParam: {
+        title: "进击的巨人",
+        page: 1,
+        limit: 10
+      }
     };
   },
   created() {
     this.plates = plates;
+    this.getUserPost();
+  },
+  methods: {
+    getUserPost() {
+      getUserPost(this.queryParam).then(res => {
+        console.log(res);
+      });
+    }
   }
 };
 </script>

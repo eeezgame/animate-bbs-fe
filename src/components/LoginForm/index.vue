@@ -5,7 +5,10 @@
         <p class=" font-bold">animate-bbs</p>
         <p class="text-gray-300">动漫论坛</p>
       </div>
-      <div class="text-center py-4 space-y-2 border-t border-gray-200">
+      <div
+        v-if="this.loginState === 0"
+        class="text-center py-4 space-y-2 border-t border-gray-200"
+      >
         <p class="">
           没有账号?<a class="text-blue-500 hover:underline" href="#"
             >现在注册</a
@@ -40,12 +43,33 @@
           </button>
         </p>
       </div>
+      <div v-if="this.loginState === 1 && this.userInfo" class=" mb-4">
+        <img
+          class="w-16 h-16 rounded-full mx-auto"
+          :src="$imgURL + this.userInfo.avatar"
+          alt=""
+        />
+        <p class=" text-center">
+          {{ userInfo.name }}
+        </p>
+        <p class="px-2">
+          <button
+            class="w-full px-2 py-1 bg-miku-500 text-gray-100 font-bold rounded hover:bg-miku-400 "
+            @click="logout"
+          >
+            登出
+          </button>
+        </p>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { login } from "@/api/user";
+import { login, getInfo, logout } from "@/api/user";
+import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
+import storage from "store";
+
 export default {
   data() {
     return {
@@ -53,13 +77,73 @@ export default {
         // emali: "",
         phone: "",
         password: ""
-      }
+      },
+      loginState: storage.get(LOGIN_STATE) || 0,
+      userInfo: storage.get(USER_INFO) || null
     };
+  },
+  created() {
+    storage.get(LOGIN_STATE) === 1 &&
+      getInfo()
+        .then(res => {
+          const { avatar, email, id, lastLoginTime, name, phone } = {
+            ...res.data
+          };
+          storage.set(USER_INFO, {
+            avatar,
+            email,
+            id,
+            lastLoginTime,
+            name,
+            phone
+          });
+        })
+        .catch(() => {
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+        });
   },
   methods: {
     login() {
-      console.log("登录", this.loginForm);
-      login(this.loginForm);
+      login(this.loginForm)
+        .then(res => {
+          storage.set(LOGIN_STATE, 1);
+          this.loginState = 1;
+          const { avatar, email, id, lastLoginTime, name, phone } = {
+            ...res.data
+          };
+          storage.set(USER_INFO, {
+            avatar,
+            email,
+            id,
+            lastLoginTime,
+            name,
+            phone
+          });
+          this.userInfo = storage.get(USER_INFO);
+        })
+        .catch(e => {
+          console.log(e, "e");
+          this.loginState = 0;
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+          this.userInfo = storage.get(USER_INFO);
+        });
+    },
+    logout() {
+      logout()
+        .then(() => {
+          this.loginState = 0;
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+        })
+        .catch(e => {
+          console.log(e, "e");
+          this.loginState = 0;
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+          this.userInfo = storage.get(USER_INFO);
+        });
     }
   }
 };
