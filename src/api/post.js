@@ -6,7 +6,8 @@ const api = {
   getAll: "/post/getAll",
   getUserPost: "/post/getUserPost",
   getOne: "/post/getOne",
-  update: "/post/update"
+  update: "/post/update",
+  reply: "/post/reply"
 };
 
 export default api;
@@ -54,6 +55,14 @@ export function deletePost(parameter) {
 export function updatePost(parameter) {
   return request({
     url: api.update,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function replyPost(parameter) {
+  return request({
+    url: api.reply,
     method: "post",
     data: parameter
   });

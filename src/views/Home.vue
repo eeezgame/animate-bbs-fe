@@ -13,7 +13,8 @@
           <div class="mt-10 px-8">
             <!-- <h1 class="mb-4 text-xl font-bold text-gray-700">Recent Post</h1> -->
             <div
-              class="bg-white px-8 py-6 max-w-sm mx-auto rounded-sm shadow-md"
+              class="px-8 py-6 max-w-sm mx-auto rounded-sm shadow-md"
+              style="background: #B6DDDE;border-color: #8FCCCD;"
             >
               <img src="../assets/ad.jpg" alt="mikufufu" />
             </div>

@@ -1,9 +1,12 @@
 <template>
   <div class="px-8">
-    <div class="flex flex-col bg-white max-w-sm  mx-auto rounded-sm shadow-md">
+    <div
+      class="flex flex-col max-w-sm  mx-auto rounded-sm shadow-md"
+      style="background: #B6DDDE;border-color: #8FCCCD;"
+    >
       <div class="px-6 py-4">
         <p class=" font-bold">animate-bbs</p>
-        <p class="text-gray-300">动漫论坛</p>
+        <p class="">动漫论坛</p>
       </div>
       <div
         v-if="this.loginState === 0"
@@ -103,6 +106,12 @@ export default {
           storage.remove(USER_INFO);
         });
   },
+  mounted() {
+    this.$bus.$on("login-state-change", () => {
+      this.loginState = storage.get(LOGIN_STATE) || 0;
+      this.userInfo = storage.get(USER_INFO) || null;
+    });
+  },
   methods: {
     login() {
       login(this.loginForm)
@@ -121,6 +130,7 @@ export default {
             phone
           });
           this.userInfo = storage.get(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         })
         .catch(e => {
           console.log(e, "e");
@@ -136,6 +146,7 @@ export default {
           this.loginState = 0;
           storage.set(LOGIN_STATE, 0);
           storage.remove(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         })
         .catch(e => {
           console.log(e, "e");
@@ -143,6 +154,7 @@ export default {
           storage.set(LOGIN_STATE, 0);
           storage.remove(USER_INFO);
           this.userInfo = storage.get(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         });
     }
   }

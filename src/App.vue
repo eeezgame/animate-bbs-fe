@@ -31,11 +31,62 @@
         </div>
         <div class="md:flex flex-col md:flex-row md:-mx-4 hidden">
           <router-link
+            v-if="this.loginState === 1"
             to="/send-post"
             class="my-1 px-2 bg-miku-500 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
             >发帖</router-link
           >
-          <a
+          <div
+            v-if="this.loginState === 1"
+            class="relative inline-block text-left"
+          >
+            <div>
+              <span
+                class="cursor-pointer inline-flex justify-center w-full   text-sm font-medium text-gray-700 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                id="options-menu"
+                aria-haspopup="true"
+                aria-expanded="true"
+                @click="userMenuOpen = !userMenuOpen"
+              >
+                {{ this.userInfo.name }}
+                <!-- Heroicon name: solid/chevron-down -->
+                <svg
+                  class="-mr-1 ml-2 h-5 w-5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+
+            <div
+              v-show="userMenuOpen"
+              class="origin-top-right absolute right-0 mt-2 w-32 shadow-lg bg-white"
+            >
+              <div
+                class="py-1 hover:bg-gray-100"
+                role="menu"
+                aria-orientation="vertical"
+                aria-labelledby="options-menu"
+              >
+                <span
+                  class="cursor-pointer text-left px-4 py-2 text-sm text-gray-700"
+                  role="menuitem"
+                  @click="logout"
+                >
+                  登出
+                </span>
+              </div>
+            </div>
+          </div>
+          <!-- <a
             href="#"
             class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
             >User</a
@@ -44,7 +95,7 @@
             href="#"
             class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
             >Theme</a
-          >
+          > -->
         </div>
       </div>
     </nav>
@@ -73,12 +124,52 @@
           alt=""
           class="w-4 h-4 inline-block"
         />
-        <a href="/" class="text-blue-600 no-underline px-1">lbwnb</a>
+        <a href="/" class="text-blue-600 no-underline px-1">联系站长</a>
       </div>
     </footer>
   </div>
 </template>
 
+<script>
+import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
+import storage from "store";
+import { logout } from "@/api/user";
+
+export default {
+  data() {
+    return {
+      loginState: storage.get(LOGIN_STATE) || 0,
+      userInfo: storage.get(USER_INFO) || null,
+      userMenuOpen: false
+    };
+  },
+  mounted() {
+    this.$bus.$on("login-state-change", () => {
+      this.loginState = storage.get(LOGIN_STATE) || 0;
+      this.userInfo = storage.get(USER_INFO) || null;
+    });
+  },
+  methods: {
+    logout() {
+      logout()
+        .then(() => {
+          this.loginState = 0;
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+        })
+        .catch(e => {
+          console.log(e, "e");
+          this.loginState = 0;
+          storage.set(LOGIN_STATE, 0);
+          storage.remove(USER_INFO);
+          this.userInfo = storage.get(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+        });
+    }
+  }
+};
+</script>
 <style lang="scss">
 body {
   background: #d2ffee;
