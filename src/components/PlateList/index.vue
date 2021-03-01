@@ -145,39 +145,14 @@
         </div>
       </div>
 
-      <div class="mt-8 hidden">
-        <div class="flex">
-          <a
-            href="#"
-            class="mx-1 px-3 py-2 bg-miku-1000 text-gray-500 font-medium rounded-md cursor-not-allowed"
-          >
-            上一页
-          </a>
-          <a
-            href="#"
-            class="mx-1 px-3 py-2 bg-miku-1000 text-gray-700 font-medium hover:bg-miku-500 hover:text-white rounded-md"
-          >
-            1
-          </a>
-          <a
-            href="#"
-            class="mx-1 px-3 py-2 bg-miku-1000 text-gray-700 font-medium hover:bg-miku-500 hover:text-white rounded-md"
-          >
-            2
-          </a>
-          <a
-            href="#"
-            class="mx-1 px-3 py-2 bg-miku-1000 text-gray-700 font-medium hover:bg-miku-500 hover:text-white rounded-md"
-          >
-            3
-          </a>
-          <a
-            href="#"
-            class="mx-1 px-3 py-2 bg-miku-1000 text-gray-700 font-medium hover:bg-miku-500 hover:text-white rounded-md"
-          >
-            下一页
-          </a>
-        </div>
+      <div class="mt-8">
+        <t-pagination
+          v-show="total > 0"
+          v-model="listQuery.page"
+          :total-items="total"
+          :per-page="listQuery.limit"
+          @change="getUserPost"
+        />
       </div>
     </div>
     <div
@@ -218,10 +193,13 @@ export default {
       queryParam: {
         title: "",
         categoryId: "",
-        plateId: "",
-        page: 1,
-        limit: 10
+        plateId: ""
       },
+      listQuery: {
+        page: 1,
+        limit: 5
+      },
+      total: 0,
       loginState: storage.get(LOGIN_STATE) || 0
     };
   },
@@ -241,10 +219,13 @@ export default {
   methods: {
     getUserPost() {
       storage.get(LOGIN_STATE) === 1
-        ? getUserPost(this.queryParam).then(res => {
-            const { records } = { ...res.data };
-            this.plates = records;
-          })
+        ? getUserPost(Object.assign({}, this.queryParam, this.listQuery)).then(
+            res => {
+              const { records, total } = { ...res.data };
+              this.plates = records;
+              this.total = total;
+            }
+          )
         : (this.plates = []);
     },
     getPostPlateList() {
@@ -268,6 +249,9 @@ export default {
             this.postCategoryOptions = records;
           })
         : (this.postCategoryOptions = []);
+    },
+    handleCurrentChange() {
+      this.getUserPost();
     }
   }
 };

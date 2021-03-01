@@ -1,6 +1,7 @@
 <template>
   <div class="mb-12" style="">
     <reply-drawer ref="relpyDrawer" @on-submit="replyPost"></reply-drawer>
+
     <div
       class="p-2 sm:w-11/12 md:w-8/12 lg:w-6/12 mx-auto divide-y-2 divide-miku-900 divide-dotted"
     >
@@ -51,11 +52,15 @@
           <div class="pl-4 py-1" v-html="item.content"></div>
           <div class="text-sm">
             <span class="text-gray-500">{{ item.createTime }}</span>
-            <span class="float-right cursor-pointer hover:text-red-500"
+            <span
+              class="float-right cursor-pointer hover:text-red-500"
+              @click="handleAdopt(item.id)"
               >[采纳]</span
             >
-            <span class="float-right cursor-pointer hover:text-red-500"
-              >[点赞]</span
+            <span
+              class="float-right cursor-pointer hover:text-red-500"
+              @click="replyLike(item.id)"
+              >[点赞 {{ item.likeNums > 0 ? item.likeNums : "" }}]</span
             >
           </div>
         </div>
@@ -65,7 +70,7 @@
 </template>
 
 <script>
-import { getPostById, replyPost } from "@/api/post";
+import { getPostById, replyPost, replyAdopt, replyLike } from "@/api/post";
 import ReplyDrawer from "@/components/ReplyDrawer";
 // import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 // import storage from "store";
@@ -104,6 +109,36 @@ export default {
 
         console.log(res, "res");
       });
+    },
+    handleAdopt(id) {
+      this.$dialog
+        .confirm({
+          title: "采纳回答",
+          text: "是否将该回答采纳为最佳答案?"
+        })
+        .then(result => {
+          const { isOk } = { ...result };
+          isOk && this.adoptReply(id);
+        });
+    },
+    adoptReply(id) {
+      replyAdopt({
+        postId: this.$route.params.id,
+        replyId: id
+      });
+    },
+    handleLike() {},
+    replyLike(id) {
+      replyLike({
+        replyId: id
+      })
+        .then(() => {
+          const reply = this.postReplyList.find(reply => reply.id === id);
+          reply && (reply.likeNums += 1);
+        })
+        .catch(e => {
+          alert(e.message);
+        });
     }
   }
 };

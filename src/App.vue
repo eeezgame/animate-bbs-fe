@@ -99,8 +99,8 @@
         </div>
       </div>
     </nav>
-    <main class=" pt-6">
-      <router-view />
+    <main class="pt-6">
+      <router-view class="mb-16" />
     </main>
     <footer
       class="bg-green-50 text-xs w-full border-solid border-gray-600 border-t p-1 fixed left-0 bottom-0"

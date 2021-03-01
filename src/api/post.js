@@ -7,7 +7,9 @@ const api = {
   getUserPost: "/post/getUserPost",
   getOne: "/post/getOne",
   update: "/post/update",
-  reply: "/post/reply"
+  reply: "/post/reply",
+  adopt: "/post/adopt",
+  replyLike: "/post/replyLike"
 };
 
 export default api;
@@ -63,6 +65,22 @@ export function updatePost(parameter) {
 export function replyPost(parameter) {
   return request({
     url: api.reply,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function replyAdopt(parameter) {
+  return request({
+    url: api.adopt,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function replyLike(parameter) {
+  return request({
+    url: api.replyLike,
     method: "post",
     data: parameter
   });

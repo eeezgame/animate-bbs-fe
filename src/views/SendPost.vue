@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col" style="height:calc(100vh - 1.5rem - 41px);">
+  <div class="flex flex-col">
     <div class="shadow h-16">
       <div class="px-5">
         <div class="flex">
@@ -202,6 +202,9 @@ export default {
         Object.assign({}, this.fmData, { postContent: this.content })
       ).then(res => {
         console.log(res, "res");
+        this.$router.push({
+          name: "Home"
+        });
       });
     }
   }

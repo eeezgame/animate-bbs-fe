@@ -5,7 +5,7 @@
     <h1 class="text-center p-6 text-yellow-900 font-extrabold text-5xl">
       MikuChan233
     </h1>
-    <div class="px-6 py-8">
+    <div class="px-6 pt-8">
       <div class="flex justify-between container mx-auto">
         <plate-list></plate-list>
         <div class="-mx-8 w-4/12 hidden lg:block">
