@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const api = {
   add: "/post/add",
   delete: "/post/delete",
-  getAll: "/post/getAll",
+  getAllUserPost: "/post/getAllUserPost",
   getUserPost: "/post/getUserPost",
   getOne: "/post/getOne",
   update: "/post/update",
@@ -14,9 +14,9 @@ const api = {
 
 export default api;
 
-export function getPostList(parameter) {
+export function getAllUserPost(parameter) {
   return request({
-    url: api.getAll,
+    url: api.getAllUserPost,
     method: "post",
     data: parameter
   });

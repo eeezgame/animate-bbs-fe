@@ -28,8 +28,13 @@ const routes = [
   {
     path: "/post/:id",
     name: "Post",
+    component: () => import(/* webpackChunkName: "post" */ "../views/Post.vue")
+  },
+  {
+    path: "/space",
+    name: "Space",
     component: () =>
-      import(/* webpackChunkName: "send-post" */ "../views/Post.vue")
+      import(/* webpackChunkName: "space" */ "../views/Space.vue")
   }
 ];
 

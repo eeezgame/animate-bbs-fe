@@ -30,7 +30,7 @@
           ]"
           @click="
             queryParam.plateId = item.id;
-            getUserPost();
+            getAllUserPost();
           "
           >{{ item.name }}</span
         >
@@ -56,7 +56,7 @@
             name="search"
             placeholder="查询帖子标题"
           />
-          <button @click="getUserPost">
+          <button @click="getAllUserPost">
             <svg
               class="text-gray-600 h-4 w-4 fill-current"
               xmlns="http://www.w3.org/2000/svg"
@@ -106,9 +106,9 @@
                     >
                       {{
                         item.adopted === 1
-                          ? `[待采纳][💰${item.adoptedPoints}]`
+                          ? `/待采纳//💰${item.adoptedPoints}/`
                           : item.adopted === 3
-                          ? `[已采纳][💰${item.adoptedPoints}]`
+                          ? `/已采纳//💰${item.adoptedPoints}/`
                           : ""
                       }}
                       {{ item.title }}</router-link
@@ -151,7 +151,7 @@
           v-model="listQuery.page"
           :total-items="total"
           :per-page="listQuery.limit"
-          @change="getUserPost"
+          @change="getAllUserPost"
         />
       </div>
     </div>
@@ -179,7 +179,7 @@
 </template>
 
 <script>
-import { getUserPost } from "@/api/post";
+import { getAllUserPost } from "@/api/post";
 import { LOGIN_STATE } from "@/store/mutation-types";
 import storage from "store";
 import { getPostPlateList } from "@/api/post-plate";
@@ -204,36 +204,33 @@ export default {
     };
   },
   created() {
-    this.getUserPost();
+    this.getAllUserPost();
     this.getPostPlateList();
     this.getPostCategoryList();
   },
   mounted() {
     this.$bus.$on("login-state-change", state => {
-      this.getUserPost();
+      this.getAllUserPost();
       this.getPostPlateList();
       this.getPostCategoryList();
       this.loginState = state;
     });
   },
   methods: {
-    getUserPost() {
+    getAllUserPost() {
       storage.get(LOGIN_STATE) === 1
-        ? getUserPost(Object.assign({}, this.queryParam, this.listQuery)).then(
-            res => {
-              const { records, total } = { ...res.data };
-              this.plates = records;
-              this.total = total;
-            }
-          )
+        ? getAllUserPost(
+            Object.assign({}, this.queryParam, this.listQuery)
+          ).then(res => {
+            const { records, total } = { ...res.data };
+            this.plates = records;
+            this.total = total;
+          })
         : (this.plates = []);
     },
     getPostPlateList() {
       storage.get(LOGIN_STATE) === 1
-        ? getPostPlateList({
-            limit: 10,
-            page: 1
-          }).then(res => {
+        ? getPostPlateList({}).then(res => {
             const { records } = { ...res.data };
             this.plateOptions = records;
           })
@@ -241,17 +238,14 @@ export default {
     },
     getPostCategoryList() {
       storage.get(LOGIN_STATE) === 1
-        ? getPostCategoryList({
-            limit: 10,
-            page: 1
-          }).then(res => {
+        ? getPostCategoryList({}).then(res => {
             const { records } = { ...res.data };
             this.postCategoryOptions = records;
           })
         : (this.postCategoryOptions = []);
     },
     handleCurrentChange() {
-      this.getUserPost();
+      this.getAllUserPost();
     }
   }
 };

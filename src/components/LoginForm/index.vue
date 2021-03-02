@@ -48,9 +48,10 @@
       </div>
       <div v-if="this.loginState === 1 && this.userInfo" class=" mb-4">
         <img
-          class="w-16 h-16 rounded-full mx-auto"
+          class="w-16 h-16 cursor-pointer rounded-full mx-auto"
           :src="$imgURL + this.userInfo.avatar"
           alt=""
+          @click="$router.push({ name: 'Space' })"
         />
         <p class=" text-center">
           {{ userInfo.name }}
