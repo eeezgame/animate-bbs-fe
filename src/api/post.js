@@ -9,7 +9,8 @@ const api = {
   update: "/post/update",
   reply: "/post/reply",
   adopt: "/post/adopt",
-  replyLike: "/post/replyLike"
+  replyLike: "/post/replyLike",
+  cancelReplyLike: "/post/cancelReplyLike"
 };
 
 export default api;
@@ -81,6 +82,14 @@ export function replyAdopt(parameter) {
 export function replyLike(parameter) {
   return request({
     url: api.replyLike,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function cancelReplyLike(parameter) {
+  return request({
+    url: api.cancelReplyLike,
     method: "post",
     data: parameter
   });

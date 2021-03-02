@@ -106,9 +106,9 @@
                     >
                       {{
                         item.adopted === 1
-                          ? `/待采纳//💰${item.adoptedPoints}/`
+                          ? `[🙏待采纳][💰${item.adoptedPoints}]`
                           : item.adopted === 3
-                          ? `/已采纳//💰${item.adoptedPoints}/`
+                          ? `[✅已采纳][💰${item.adoptedPoints}]`
                           : ""
                       }}
                       {{ item.title }}</router-link
@@ -231,16 +231,16 @@ export default {
     getPostPlateList() {
       storage.get(LOGIN_STATE) === 1
         ? getPostPlateList({}).then(res => {
-            const { records } = { ...res.data };
-            this.plateOptions = records;
+            const { data } = { ...res };
+            this.plateOptions = data;
           })
         : (this.plateOptions = []);
     },
     getPostCategoryList() {
       storage.get(LOGIN_STATE) === 1
         ? getPostCategoryList({}).then(res => {
-            const { records } = { ...res.data };
-            this.postCategoryOptions = records;
+            const { data } = { ...res };
+            this.postCategoryOptions = data;
           })
         : (this.postCategoryOptions = []);
     },

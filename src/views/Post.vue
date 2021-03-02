@@ -5,8 +5,8 @@
     <div
       class="p-2 sm:w-11/12 md:w-8/12 lg:w-6/12 mx-auto divide-y-2 divide-miku-900 divide-dotted"
     >
-      <div class="p-2">
-        <p class=" ">
+      <div class="py-2">
+        <p class="">
           <span
             class="h-6 w-6 cursor-pointer float-right"
             @click="postInfo.collected ? postCancelCollect() : postCollect()"
@@ -33,18 +33,18 @@
           <span class="">
             {{
               postInfo.adopted === 1
-                ? `/待采纳/`
+                ? `🙏待采纳`
                 : postInfo.adopted === 3
-                ? `/已采纳/`
+                ? `✅已采纳`
                 : ""
             }}</span
           >
           <span>
             {{
               postInfo.adopted === 1
-                ? `/💰${postInfo.adoptedPoints}/`
+                ? `💰${postInfo.adoptedPoints}`
                 : postInfo.adopted === 3
-                ? `/💰${postInfo.adoptedPoints}/`
+                ? `💰${postInfo.adoptedPoints}`
                 : ""
             }}
           </span>
@@ -54,43 +54,70 @@
             >[回复]</span
           >
         </p>
-        <p>
-          {{ postInfo.userId }} {{ postInfo.createTime }}
-          <span class="float-right">#0</span>
-        </p>
-        <div v-html="postInfo.postContent"></div>
+        <div class="flex" v-if="postInfo.user">
+          <img
+            :src="$imgURL + postInfo.user.avatar"
+            :alt="postInfo.name"
+            class="w-16 h-16"
+          />
+          <div class="px-2">
+            <div class="w-full">
+              {{ postInfo.user.name
+              }}<span class="float-right">{{ postInfo.createTime }}</span>
+            </div>
+            <div v-html="postInfo.postContent"></div>
+          </div>
+        </div>
       </div>
       <div
-        class="flex p-2"
-        style="background: #B6DDDE;border-color: #8FCCCD;"
+        class="p-2 border-miku-1100 relative"
+        :class="[item.adopted === 1 ? 'bg-yellow-100' : 'bg-miku-1000']"
         v-for="item in postReplyList"
         :key="item.id"
       >
-        <div class="h-16 w-16 ">
-          <img :src="$imgURL + item.user.avatar" :alt="item.user.name" />
-        </div>
-        <div class="px-2 w-full">
-          <div>
-            <span
-              class=" cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
-            >
-              {{ item.user.name }}
-            </span>
-            <span class="float-right">#{{ item.floor }}</span>
+        <p v-if="item.adopted === 1" class="absolute -top-6 -right-4 ">
+          <img
+            class="w-8 h-8 transform rotate-45"
+            src="@/assets/miku_happy.png"
+            alt="已采纳"
+          />
+        </p>
+        <p v-if="item.adopted === 1" class="font-bold text-lg">🏅最佳回复</p>
+        <div class="flex w-full">
+          <div class="h-16 w-16 ">
+            <img :src="$imgURL + item.user.avatar" :alt="item.user.name" />
           </div>
-          <div class="pl-4 py-1" v-html="item.content"></div>
-          <div class="text-sm">
-            <span class="text-gray-500">{{ item.createTime }}</span>
-            <span
-              class="float-right cursor-pointer hover:text-red-500"
-              @click="handleAdopt(item.id)"
-              >[采纳]</span
-            >
-            <span
-              class="float-right cursor-pointer hover:text-red-500"
-              @click="replyLike(item.id)"
-              >[点赞 {{ item.likeNums > 0 ? item.likeNums : "" }}]</span
-            >
+          <div class="px-2 w-full">
+            <div>
+              <span
+                class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+              >
+                {{ item.user.name }}
+              </span>
+              <span class="float-right">#{{ item.floor }}</span>
+            </div>
+            <div class="pl-4 py-1" v-html="item.content"></div>
+            <div class="text-sm">
+              <span class="text-gray-500">{{ item.createTime }}</span>
+              <span
+                v-if="
+                  postInfo.adopted !== 3 &&
+                    postInfo.adopted === 1 &&
+                    userInfo.id !== item.userId
+                "
+                class="float-right cursor-pointer hover:text-red-500"
+                @click="handleAdopt(item.id)"
+                >[采纳]</span
+              >
+              <span
+                class="float-right cursor-pointer hover:text-red-500"
+                @click="
+                  item.liked ? replyCancelLike(item.id) : replyLike(item.id)
+                "
+                >[{{ item.liked ? "已点赞" : "点赞" }}
+                {{ item.likeNums > 0 ? item.likeNums : "" }}]</span
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -99,12 +126,18 @@
 </template>
 
 <script>
-import { getPostById, replyPost, replyAdopt, replyLike } from "@/api/post";
+import {
+  getPostById,
+  replyPost,
+  replyAdopt,
+  replyLike,
+  cancelReplyLike
+} from "@/api/post";
 import { collect, cancelCollect } from "@/api/post-collect";
 
 import ReplyDrawer from "@/components/ReplyDrawer";
-// import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
-// import storage from "store";
+import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
+import storage from "store";
 export default {
   name: "Post",
   components: {
@@ -114,7 +147,9 @@ export default {
     return {
       postInfo: {},
       postReplyList: [],
-      collected: false
+      collected: false,
+      loginState: storage.get(LOGIN_STATE) || 0,
+      userInfo: storage.get(USER_INFO) || null
     };
   },
   created() {
@@ -125,7 +160,7 @@ export default {
       this.$route.params &&
         this.$route.params.id &&
         getPostById({ postId: this.$route.params.id }).then(res => {
-          this.postInfo = Object.assign({}, res.data, { collected: 0 });
+          this.postInfo = res.data;
           const { postReplyList } = { ...res.data };
           this.postReplyList = postReplyList;
         });
@@ -142,6 +177,7 @@ export default {
         console.log(res, "res");
       });
     },
+
     handleAdopt(id) {
       this.$dialog
         .confirm({
@@ -166,7 +202,25 @@ export default {
       })
         .then(() => {
           const reply = this.postReplyList.find(reply => reply.id === id);
-          reply && (reply.likeNums += 1);
+          if (reply) {
+            reply.likeNums += 1;
+            reply.liked = true;
+          }
+        })
+        .catch(e => {
+          alert(e.message);
+        });
+    },
+    replyCancelLike(id) {
+      cancelReplyLike({
+        replyId: id
+      })
+        .then(() => {
+          const reply = this.postReplyList.find(reply => reply.id === id);
+          if (reply) {
+            reply.likeNums -= 1;
+            reply.liked = false;
+          }
         })
         .catch(e => {
           alert(e.message);
