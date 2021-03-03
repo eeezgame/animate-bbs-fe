@@ -13,7 +13,7 @@ const setting = {
         disabledElement: "w-8 h-8 border border-gray-200 table-cell",
         ellipsisElement: "w-8 h-8 border border-gray-200 hidden md:table-cell",
         activeButton:
-          "bg-miku-500 w-full h-full text-white hover:bg-miku-600 transition duration-100 ease-in-out focus:ring-2 focus:ring-miku-500 focus:outline-none focus:ring-opacity-50",
+          "bg-miku-700 w-full h-full text-white hover:bg-miku-600 transition duration-100 ease-in-out focus:ring-2 focus:ring-miku-500 focus:outline-none focus:ring-opacity-50",
         disabledButton:
           "opacity-25 w-full h-full cursor-not-allowed transition duration-100 ease-in-out",
         button:
@@ -28,7 +28,7 @@ const setting = {
           disabledElement: "w-8 h-8 rounded-full",
           ellipsisElement: "w-8 h-8 rounded-full hidden md:inline",
           activeButton:
-            "border border-miku-500 bg-miku-500 w-full h-full rounded-full text-white hover:bg-miku-600 transition duration-100 ease-in-out focus:ring-2 focus:ring-miku-500 focus:outline-none focus:ring-opacity-50",
+            "border border-miku-500 bg-miku-700 w-full h-full rounded-full text-white hover:bg-miku-600 transition duration-100 ease-in-out focus:ring-2 focus:ring-miku-500 focus:outline-none focus:ring-opacity-50",
           disabledButton:
             "border border-gray-200  opacity-25 w-full h-full rounded-full cursor-not-allowed transition duration-100 ease-in-out",
           button:

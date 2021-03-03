@@ -18,7 +18,7 @@
         </select>
       </div>
     </div> -->
-      <div class="w-full bg-miku-500 px-3 py-2 space-x-2">
+      <div class="w-full bg-miku-700 px-3 py-2 space-x-2">
         <span
           v-for="item in plateOptions"
           :key="item.id"

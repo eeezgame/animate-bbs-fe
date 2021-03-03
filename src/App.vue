@@ -33,7 +33,7 @@
           <router-link
             v-if="this.loginState === 1"
             to="/send-post"
-            class="my-1 px-2 bg-miku-500 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
+            class="my-1 px-2 bg-miku-700 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
             >发帖</router-link
           >
           <div

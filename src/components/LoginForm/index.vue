@@ -39,7 +39,7 @@
         </form>
         <p class="px-2">
           <button
-            class="w-full px-2 py-1 bg-miku-500 text-gray-100 font-bold rounded hover:bg-miku-400 "
+            class="w-full px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
             @click="login"
           >
             立即登录
@@ -58,7 +58,7 @@
         </p>
         <p class="px-2">
           <button
-            class="w-full px-2 py-1 bg-miku-500 text-gray-100 font-bold rounded hover:bg-miku-400 "
+            class="w-full px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
             @click="logout"
           >
             登出

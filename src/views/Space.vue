@@ -13,9 +13,19 @@
             <div
               class="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-16 h-16 bg-black bg-opacity-60 text-center text-gray-100 absolute top-0 left-0  rounded-full "
               style="line-height:4rem;"
+              @click="handleChangeAvatar"
             >
               更换头像
             </div>
+            <input
+              ref="avatarUpload"
+              type="file"
+              name="file"
+              accept="image/*"
+              id="upload"
+              @change="updateAvatar"
+            />
+            <!-- class="hidden" -->
           </div>
           <p class="text-center">
             {{ userInfo.name }}
@@ -149,6 +159,15 @@ export default {
             // this.total = total;
           })
         : (this.plates = []);
+    },
+    handleChangeAvatar() {
+      this.$refs.avatarUpload && this.$refs.avatarUpload.click();
+    },
+    updateAvatar(e) {
+      console.log(e, "e");
+      this.$refs.avatarUpload.files && this.$refs.avatarUpload.files[0];
+
+      // URL.createObjectURL()
     }
   }
 };
