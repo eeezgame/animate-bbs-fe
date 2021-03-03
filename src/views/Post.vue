@@ -85,7 +85,50 @@
         <p v-if="item.adopted === 1" class="font-bold text-lg">🏅最佳回复</p>
         <div class="flex w-full">
           <div class="h-16 w-16 ">
-            <img :src="$imgURL + item.user.avatar" :alt="item.user.name" />
+            <popper
+              trigger="hover"
+              :options="{
+                placement: 'top-start',
+                modifiers: { offset: { offset: '2rem,1rem' } }
+              }"
+            >
+              <div class="popper">
+                <t-card>
+                  <div style="width: 300px" class="flex">
+                    <img
+                      :src="$imgURL + item.user.avatar"
+                      :alt="item.user.name"
+                      class="h-10 w-10 rounded-full"
+                    />
+                    <div
+                      style="height: 100px"
+                      class="w-full text-left px-2 space-y-2"
+                    >
+                      <p>
+                        <span
+                          class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+                        >
+                          {{ item.user.name }}
+                        </span>
+                      </p>
+                      <p><span>关注 200</span> <span>粉丝 5222</span></p>
+
+                      <p>
+                        <button
+                          class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
+                        >
+                          关注
+                        </button>
+                      </p>
+                    </div>
+                  </div>
+                </t-card>
+              </div>
+
+              <span slot="reference">
+                <img :src="$imgURL + item.user.avatar" :alt="item.user.name" />
+              </span>
+            </popper>
           </div>
           <div class="px-2 w-full">
             <div>
@@ -134,14 +177,16 @@ import {
   cancelReplyLike
 } from "@/api/post";
 import { collect, cancelCollect } from "@/api/post-collect";
-
 import ReplyDrawer from "@/components/ReplyDrawer";
+import Popper from "vue-popperjs";
+import "vue-popperjs/dist/vue-popper.css";
 import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 import storage from "store";
 export default {
   name: "Post",
   components: {
-    ReplyDrawer
+    ReplyDrawer,
+    Popper
   },
   data() {
     return {
