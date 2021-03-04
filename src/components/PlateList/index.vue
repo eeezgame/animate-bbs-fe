@@ -88,14 +88,17 @@
             <tbody>
               <tr>
                 <td width="48" valign="top" align="center">
-                  <a href="/member/Index98"
-                    ><img
+                  <router-link
+                    :to="{ name: 'Space', params: { id: item.userId } }"
+                    class="text-gray-800 hover:text-red-500 text-sm"
+                  >
+                    <img
                       :src="$imgURL + item.user.avatar"
                       class=" rounded-sm"
                       border="0"
                       align="default"
                       alt="Index98"
-                  /></a>
+                  /></router-link>
                 </td>
                 <td width="10"></td>
                 <td width="auto" valign="middle">

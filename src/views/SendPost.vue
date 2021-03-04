@@ -185,15 +185,15 @@ export default {
       limit: 10,
       page: 1
     }).then(res => {
-      const { records } = { ...res.data };
-      this.plateOptions = records;
+      const { data } = { ...res };
+      this.plateOptions = data;
     });
     getPostCategoryList({
       limit: 10,
       page: 1
     }).then(res => {
-      const { records } = { ...res.data };
-      this.postCategoryOptions = records;
+      const { data } = { ...res };
+      this.postCategoryOptions = data;
     });
   },
   methods: {

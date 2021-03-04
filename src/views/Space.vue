@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-8/12 mx-auto mt-8">
+    <div class="w-8/12 mx-auto mt-8" v-if="userInfo">
       <div>
         <h3 class="bg-miku-1100 py-1 px-2">个人信息</h3>
         <div class="bg-gray-50 py-2 px-6">
@@ -72,7 +72,7 @@
           </t-table>
         </div>
       </div>
-      <div>
+      <div v-if="isMySpace">
         <h3 class="bg-miku-1100 py-1 px-2">
           我的收藏<span class="hover:text-red-500 cursor-pointer float-right"
             >[更多]</span
@@ -120,7 +120,7 @@
 import storage from "store";
 import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 import { getUserCollect } from "@/api/post-collect";
-import { getUserPost } from "@/api/post";
+import { getUserPost, getAllUserPost } from "@/api/post";
 
 export default {
   name: "Space",
@@ -132,36 +132,60 @@ export default {
       userPosts: []
     };
   },
+  computed: {
+    isMySpace() {
+      return this.userInfo && this.userInfo.id === this.$route.params.id;
+    }
+  },
   created() {
     this.$bus.$on("login-state-change", () => {
       this.loginState = storage.get(LOGIN_STATE) || 0;
       this.userInfo = storage.get(USER_INFO) || null;
     });
-    getUserCollect().then(res => {
-      this.postCollections = res.data;
-    });
+
     this.getUserPost();
   },
   methods: {
     getUserPost() {
       storage.get(LOGIN_STATE) === 1
-        ? getUserPost(
-            Object.assign(
-              {},
-              {
-                page: 1,
-                limit: 5
-              }
-            )
-          ).then(res => {
-            const { records } = { ...res.data };
-            this.userPosts = records;
-            // this.total = total;
-          })
+        ? this.isMySpace
+          ? getUserPost(
+              Object.assign(
+                {},
+                {
+                  page: 1,
+                  limit: 5
+                }
+              )
+            ).then(res => {
+              const { records } = { ...res.data };
+              this.userPosts = records;
+            })
+          : getAllUserPost(
+              Object.assign(
+                {
+                  userId: this.$route.params.id
+                },
+                {
+                  page: 1,
+                  limit: 5
+                }
+              )
+            ).then(res => {
+              const { records } = { ...res.data };
+              this.userPosts = records;
+            })
         : (this.plates = []);
     },
     handleChangeAvatar() {
       this.$refs.avatarUpload && this.$refs.avatarUpload.click();
+    },
+    getUserCollect() {
+      storage.get(LOGIN_STATE) === 1 && this.isMySpace
+        ? getUserCollect().then(res => {
+            this.postCollections = res.data;
+          })
+        : (this.postCollections = []);
     },
     updateAvatar(e) {
       console.log(e, "e");

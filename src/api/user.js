@@ -9,7 +9,10 @@ const userApi = {
   SendSmsErr: "/account/sms_err",
   // get my info
   UserInfo: "/user/getCurrentUser",
-  UserMenu: "/user/nav"
+  UserMenu: "/user/nav",
+  IsFollow: "/user/isFollow",
+  Follow: "/user/follow",
+  CancelFollow: "/user/cancelFollow"
 };
 
 /**
@@ -57,5 +60,29 @@ export function logout() {
   return request({
     url: userApi.Logout,
     method: "get"
+  });
+}
+
+export function isFollow(parameter) {
+  return request({
+    url: userApi.IsFollow,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function Follow(parameter) {
+  return request({
+    url: userApi.Follow,
+    method: "post",
+    data: parameter
+  });
+}
+
+export function CancelFollow(parameter) {
+  return request({
+    url: userApi.CancelFollow,
+    method: "post",
+    data: parameter
   });
 }

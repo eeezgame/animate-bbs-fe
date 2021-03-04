@@ -9,7 +9,7 @@
         <p class="">动漫论坛</p>
       </div>
       <div
-        v-if="this.loginState === 0"
+        v-if="loginState === 0"
         class="text-center py-4 space-y-2 border-t border-gray-200"
       >
         <p class="">
@@ -46,12 +46,12 @@
           </button>
         </p>
       </div>
-      <div v-if="this.loginState === 1 && this.userInfo" class=" mb-4">
+      <div v-if="loginState === 1 && userInfo" class=" mb-4">
         <img
           class="w-16 h-16 cursor-pointer rounded-full mx-auto"
-          :src="$imgURL + this.userInfo.avatar"
+          :src="$imgURL + userInfo.avatar"
           alt=""
-          @click="$router.push({ name: 'Space' })"
+          @click="$router.push({ name: 'Space', params: { id: userInfo.id } })"
         />
         <p class=" text-center">
           {{ userInfo.name }}

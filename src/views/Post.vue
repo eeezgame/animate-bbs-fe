@@ -1,7 +1,6 @@
 <template>
   <div class="mb-12" style="">
     <reply-drawer ref="relpyDrawer" @on-submit="replyPost"></reply-drawer>
-
     <div
       class="p-2 sm:w-11/12 md:w-8/12 lg:w-6/12 mx-auto divide-y-2 divide-miku-900 divide-dotted"
     >
@@ -55,11 +54,65 @@
           >
         </p>
         <div class="flex" v-if="postInfo.user">
-          <img
-            :src="$imgURL + postInfo.user.avatar"
-            :alt="postInfo.name"
-            class="w-16 h-16"
-          />
+          <popper
+            trigger="hover"
+            :options="{
+              placement: 'top-start',
+              modifiers: { offset: { offset: '2rem,1rem' } }
+            }"
+            @show="onFloorMasterUserCardShow(postInfo)"
+          >
+            <div class="popper">
+              <t-card>
+                <div style="width: 300px" class="flex">
+                  <img
+                    :src="$imgURL + postInfo.user.avatar"
+                    :alt="postInfo.user.name"
+                    class="h-10 w-10 rounded-full"
+                  />
+                  <div
+                    style="height: 100px"
+                    class="w-full text-left px-2 space-y-2"
+                  >
+                    <p>
+                      <span
+                        class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+                      >
+                        {{ postInfo.user.name }}
+                      </span>
+                    </p>
+                    <p><span>关注 200</span> <span>粉丝 5222</span></p>
+
+                    <p v-if="postInfo.user && '_isFollowed' in postInfo.user">
+                      <button
+                        v-if="!postInfo.user._isFollowed"
+                        class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400"
+                        @click="followFloorMaster(postInfo.userId)"
+                      >
+                        关注
+                      </button>
+                      <button
+                        v-else
+                        class="w-32 px-2 py-1 bg-gray-500 text-gray-100 font-bold rounded"
+                        @click="cancelFollowFloorMaster(postInfo.userId)"
+                      >
+                        取消关注
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </t-card>
+            </div>
+
+            <span slot="reference">
+              <img
+                :src="$imgURL + postInfo.user.avatar"
+                :alt="postInfo.name"
+                class="w-16 h-16"
+              />
+            </span>
+          </popper>
+
           <div class="px-2">
             <div class="w-full">
               {{ postInfo.user.name
@@ -91,6 +144,7 @@
                 placement: 'top-start',
                 modifiers: { offset: { offset: '2rem,1rem' } }
               }"
+              @show="onFloorUserCardShow(item)"
             >
               <div class="popper">
                 <t-card>
@@ -112,12 +166,20 @@
                         </span>
                       </p>
                       <p><span>关注 200</span> <span>粉丝 5222</span></p>
-
                       <p>
                         <button
-                          class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
+                          v-if="!item._isFollowed"
+                          class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400"
+                          @click="followLouxia(item)"
                         >
                           关注
+                        </button>
+                        <button
+                          v-else
+                          class="w-32 px-2 py-1 bg-gray-500 text-gray-100 font-bold rounded"
+                          @click="cancelFollowLouxia(item)"
+                        >
+                          取消关注
                         </button>
                       </p>
                     </div>
@@ -177,6 +239,7 @@ import {
   cancelReplyLike
 } from "@/api/post";
 import { collect, cancelCollect } from "@/api/post-collect";
+import { isFollow, Follow, CancelFollow } from "@/api/user";
 import ReplyDrawer from "@/components/ReplyDrawer";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
@@ -205,9 +268,17 @@ export default {
       this.$route.params &&
         this.$route.params.id &&
         getPostById({ postId: this.$route.params.id }).then(res => {
-          this.postInfo = res.data;
+          this.postInfo = Object.assign({}, res.data, {
+            user: {
+              ...res.data.user,
+              _isFollowed: false
+            }
+          });
           const { postReplyList } = { ...res.data };
-          this.postReplyList = postReplyList;
+          this.postReplyList = postReplyList.map(item => {
+            this.$set(item, "_isFollowed", false);
+            return item;
+          });
         });
     },
     replyPost({ content }) {
@@ -293,6 +364,59 @@ export default {
         .catch(e => {
           console.log(e);
           this.postInfo.collected = 1;
+        });
+    },
+    onFloorMasterUserCardShow(postInfo) {
+      const { userId } = { ...postInfo };
+      isFollow({ userTwo: userId }).then(res => {
+        res.msg === 0
+          ? (this.postInfo.user._isFollowed = false)
+          : res.msg === 1
+          ? (this.postInfo.user._isFollowed = true)
+          : "";
+      });
+    },
+    followFloorMaster(userId) {
+      Follow({ followId: userId }).then(() => {
+        this.postInfo.user._isFollowed = true;
+      });
+    },
+    cancelFollowFloorMaster(userId) {
+      CancelFollow({ followId: userId }).then(() => {
+        this.postInfo.user._isFollowed = false;
+      });
+    },
+    onFloorUserCardShow(replyInfo) {
+      // const { id, userId } = { ...replyInfo };
+      const replyItem = this.postReplyList.find(
+        reply => reply.id == replyInfo.id
+      );
+      if (replyItem) {
+        isFollow({ userTwo: replyInfo.userId }).then(res => {
+          res.data === 0
+            ? (replyItem._isFollowed = false)
+            : res.data === 1
+            ? (replyItem._isFollowed = true)
+            : "";
+        });
+      }
+    },
+    followLouxia(replyInfo) {
+      const replyItem = this.postReplyList.find(
+        reply => reply.id == replyInfo.id
+      );
+      replyItem &&
+        Follow({ followId: replyItem.userId }).then(() => {
+          replyItem._isFollowed = true;
+        });
+    },
+    cancelFollowLouxia(replyInfo) {
+      const replyItem = this.postReplyList.find(
+        reply => reply.id == replyInfo.id
+      );
+      replyItem &&
+        CancelFollow({ followId: replyItem.userId }).then(() => {
+          replyItem._isFollowed = false;
         });
     }
   }
