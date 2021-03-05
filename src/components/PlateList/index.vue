@@ -94,10 +94,10 @@
                   >
                     <img
                       :src="$imgURL + item.user.avatar"
-                      class=" rounded-sm"
+                      class="rounded-sm"
                       border="0"
                       align="default"
-                      alt="Index98"
+                      :alt="item.user.name"
                   /></router-link>
                 </td>
                 <td width="10"></td>
@@ -120,10 +120,13 @@
                   <div class="sep5"></div>
                   <span class="topic_info"
                     ><div class="votes"></div>
-                    <strong
-                      ><a href="/member/Index98">{{
-                        item.user.name
-                      }}</a></strong
+                    <strong>
+                      <router-link
+                        :to="{ name: 'Space', params: { id: item.userId } }"
+                        class="text-gray-800 hover:text-red-500 text-sm"
+                      >
+                        {{ item.user.name }}</router-link
+                      ></strong
                     >
                     <!-- <span title="2021-01-31 15:43:58 +08:00">5 分钟前</span>
                   <strong><a href="/member/cmllwxxl">cmllwxxl</a></strong> -->

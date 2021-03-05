@@ -87,6 +87,10 @@ export default {
     };
   },
   created() {
+    this.$bus.$on("login-state-change", () => {
+      this.loginState = storage.get(LOGIN_STATE) || 0;
+      this.userInfo = storage.get(USER_INFO) || null;
+    });
     storage.get(LOGIN_STATE) === 1 &&
       getInfo()
         .then(res => {
@@ -105,14 +109,10 @@ export default {
         .catch(() => {
           storage.set(LOGIN_STATE, 0);
           storage.remove(USER_INFO);
+          this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         });
   },
-  mounted() {
-    this.$bus.$on("login-state-change", () => {
-      this.loginState = storage.get(LOGIN_STATE) || 0;
-      this.userInfo = storage.get(USER_INFO) || null;
-    });
-  },
+  mounted() {},
   methods: {
     login() {
       login(this.loginForm)

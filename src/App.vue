@@ -143,7 +143,7 @@ export default {
       userMenuOpen: false
     };
   },
-  mounted() {
+  created() {
     this.$bus.$on("login-state-change", () => {
       this.loginState = storage.get(LOGIN_STATE) || 0;
       this.userInfo = storage.get(USER_INFO) || null;

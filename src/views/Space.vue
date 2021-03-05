@@ -188,9 +188,9 @@ export default {
         : (this.postCollections = []);
     },
     updateAvatar(e) {
-      console.log(e, "e");
       this.$refs.avatarUpload.files && this.$refs.avatarUpload.files[0];
-
+      let fd = new FormData();
+      fd.append("file", this.$refs.avatarUpload.files[0]);
       // URL.createObjectURL()
     }
   }
