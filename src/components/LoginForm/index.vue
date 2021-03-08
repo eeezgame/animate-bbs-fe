@@ -13,8 +13,9 @@
         class="text-center py-4 space-y-2 border-t border-gray-200"
       >
         <p class="">
-          没有账号?<a class="text-blue-500 hover:underline" href="#"
-            >现在注册</a
+          没有账号?
+          <router-link to="/register" class="text-blue-500 hover:underline"
+            >现在注册</router-link
           >
         </p>
         <form class="px-2 space-y-2">
