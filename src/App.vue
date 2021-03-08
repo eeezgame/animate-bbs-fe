@@ -32,6 +32,12 @@
         <div class="md:flex flex-col md:flex-row md:-mx-4 hidden">
           <router-link
             v-if="this.loginState === 1"
+            to="/shop"
+            class=" text-black hover:text-red-500 font-bold  md:my-0"
+            >[积分商城]</router-link
+          >
+          <router-link
+            v-if="this.loginState === 1"
             to="/send-post"
             class="my-1 px-2 bg-miku-700 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
             >发帖</router-link
@@ -46,6 +52,7 @@
                 id="options-menu"
                 aria-haspopup="true"
                 aria-expanded="true"
+                v-click-outside="userMenuHiden"
                 @click="userMenuOpen = !userMenuOpen"
               >
                 {{ this.userInfo.name }}
@@ -71,18 +78,26 @@
               class="origin-top-right absolute right-0 mt-2 w-32 shadow-lg bg-white"
             >
               <div
-                class="py-1 hover:bg-gray-100"
+                class="py-1  text-left"
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
               >
-                <span
-                  class="cursor-pointer text-left px-4 py-2 text-sm text-gray-700"
+                <router-link
+                  tag="p"
+                  v-if="this.loginState === 1"
+                  to="/my-orders"
+                  class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
+                  >我的订单</router-link
+                >
+
+                <p
+                  class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   role="menuitem"
                   @click="logout"
                 >
                   登出
-                </span>
+                </p>
               </div>
             </div>
           </div>
@@ -131,11 +146,15 @@
 </template>
 
 <script>
+import ClickOutside from "vue-click-outside";
 import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 import storage from "store";
 import { logout } from "@/api/user";
 
 export default {
+  directives: {
+    ClickOutside
+  },
   data() {
     return {
       loginState: storage.get(LOGIN_STATE) || 0,
@@ -166,6 +185,9 @@ export default {
           this.userInfo = storage.get(USER_INFO);
           this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         });
+    },
+    userMenuHiden() {
+      this.userMenuOpen = false;
     }
   }
 };

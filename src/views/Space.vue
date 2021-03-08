@@ -19,6 +19,7 @@
             </div>
             <input
               ref="avatarUpload"
+              class="hidden"
               type="file"
               name="file"
               accept="image/*"
@@ -121,6 +122,8 @@ import storage from "store";
 import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 import { getUserCollect } from "@/api/post-collect";
 import { getUserPost, getAllUserPost } from "@/api/post";
+import { uploadImage } from "@/api/upload";
+import { updateUser } from "@/api/user-manage";
 
 export default {
   name: "Space",
@@ -187,11 +190,20 @@ export default {
           })
         : (this.postCollections = []);
     },
-    updateAvatar(e) {
+    updateAvatar() {
       this.$refs.avatarUpload.files && this.$refs.avatarUpload.files[0];
       let fd = new FormData();
       fd.append("file", this.$refs.avatarUpload.files[0]);
-      // URL.createObjectURL()
+      uploadImage(fd).then(res => {
+        updateUser(
+          Object.assign({}, this.userInfo, {
+            avatar: res.data,
+            lastLoginTime: void 0
+          })
+        ).then(() => {
+          this.userInfo.avatar = res.data;
+        });
+      });
     }
   }
 };

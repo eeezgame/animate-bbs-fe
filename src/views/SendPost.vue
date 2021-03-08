@@ -181,17 +181,11 @@ export default {
     };
   },
   created() {
-    getPostPlateList({
-      limit: 10,
-      page: 1
-    }).then(res => {
+    getPostPlateList({}).then(res => {
       const { data } = { ...res };
       this.plateOptions = data;
     });
-    getPostCategoryList({
-      limit: 10,
-      page: 1
-    }).then(res => {
+    getPostCategoryList({}).then(res => {
       const { data } = { ...res };
       this.postCategoryOptions = data;
     });

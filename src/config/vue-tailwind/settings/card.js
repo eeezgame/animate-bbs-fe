@@ -17,10 +17,11 @@ const setting = {
         footer: "border-gray-100"
       },
       variants: {
-        danger: {
-          wrapper: "bg-red-50 text-red-700 border-red-200",
-          header: "border-red-200 text-red-700",
-          footer: "border-red-200 text-red-700"
+        miku: {
+          wrapper: "bg-miku-1000",
+          body: "",
+          header: "border-gray-100",
+          footer: "border-gray-100"
         }
       }
     }
