@@ -95,7 +95,7 @@ export default {
     storage.get(LOGIN_STATE) === 1 &&
       getInfo()
         .then(res => {
-          const { avatar, email, id, lastLoginTime, name, phone } = {
+          const { avatar, email, id, lastLoginTime, name, phone, points } = {
             ...res.data
           };
           storage.set(USER_INFO, {
@@ -104,7 +104,8 @@ export default {
             id,
             lastLoginTime,
             name,
-            phone
+            phone,
+            points
           });
         })
         .catch(() => {
@@ -120,7 +121,7 @@ export default {
         .then(res => {
           storage.set(LOGIN_STATE, 1);
           this.loginState = 1;
-          const { avatar, email, id, lastLoginTime, name, phone } = {
+          const { avatar, email, id, lastLoginTime, name, phone, points } = {
             ...res.data
           };
           storage.set(USER_INFO, {
@@ -129,7 +130,8 @@ export default {
             id,
             lastLoginTime,
             name,
-            phone
+            phone,
+            points
           });
           this.userInfo = storage.get(USER_INFO);
           this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));

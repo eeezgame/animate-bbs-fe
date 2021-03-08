@@ -40,6 +40,9 @@
 </template>
 
 <script>
+import { login } from "@/api/user";
+import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
+import storage from "store";
 import { addUser } from "@/api/user-manage";
 const defalutForm = {
   //   avatar: "",
@@ -63,8 +66,8 @@ export default {
   name: "Register",
   data() {
     return {
-      form: defalutForm,
-      formState: defalutFormState
+      form: Object.assign({}, defalutForm),
+      formState: Object.assign({}, defalutFormState)
     };
   },
   methods: {
@@ -87,14 +90,45 @@ export default {
         }
       }); */
       result &&
-        addUser(this.form).then(res => {
-          console.log(res, "res");
-          //   this.resetForm();
+        addUser(this.form).then(() => {
+          login(this.form)
+            .then(res => {
+              storage.set(LOGIN_STATE, 1);
+              const {
+                avatar,
+                email,
+                id,
+                lastLoginTime,
+                name,
+                phone,
+                points
+              } = {
+                ...res.data
+              };
+              storage.set(USER_INFO, {
+                avatar,
+                email,
+                id,
+                lastLoginTime,
+                name,
+                phone,
+                points
+              });
+              // this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+              window.location.href = "/";
+            })
+            .catch(e => {
+              console.log(e, "e");
+              this.loginState = 0;
+              storage.set(LOGIN_STATE, 0);
+              storage.remove(USER_INFO);
+            });
+          this.resetForm();
         });
     },
     resetForm() {
-      this.form = defalutForm;
-      this.formState = defalutForm;
+      this.form = Object.assign({}, this.form, defalutForm);
+      this.formState = Object.assign({}, this.formState, defalutForm);
     }
   }
 };

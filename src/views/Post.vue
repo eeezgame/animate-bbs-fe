@@ -81,7 +81,6 @@
                         {{ postInfo.user.name }}
                       </span>
                     </p>
-                    <p><span>关注 200</span> <span>粉丝 5222</span></p>
 
                     <p v-if="postInfo.user && '_isFollowed' in postInfo.user">
                       <button
@@ -165,7 +164,6 @@
                           {{ item.user.name }}
                         </span>
                       </p>
-                      <p><span>关注 200</span> <span>粉丝 5222</span></p>
                       <p>
                         <button
                           v-if="!item._isFollowed"
@@ -369,9 +367,9 @@ export default {
     onFloorMasterUserCardShow(postInfo) {
       const { userId } = { ...postInfo };
       isFollow({ userTwo: userId }).then(res => {
-        res.msg === 0
+        res.data === 0
           ? (this.postInfo.user._isFollowed = false)
-          : res.msg === 1
+          : res.data === 1
           ? (this.postInfo.user._isFollowed = true)
           : "";
       });

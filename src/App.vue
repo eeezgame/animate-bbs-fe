@@ -90,7 +90,13 @@
                   class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   >我的订单</router-link
                 >
-
+                <router-link
+                  tag="p"
+                  v-if="this.loginState === 1"
+                  :to="'/space/' + userInfo.id"
+                  class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
+                  >我的空间</router-link
+                >
                 <p
                   class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   role="menuitem"

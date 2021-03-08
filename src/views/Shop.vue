@@ -7,11 +7,15 @@
             class="relative flex cursor-pointer item-container bg-miku-1000"
             @click="handleBuyGood(item)"
           >
-            <div style="height: 233px;width: 175px;" class="relative">
+            <div
+              style="height: 233px;width: 175px;flex-basis: 175px;"
+              class="relative"
+            >
               <img
                 :src="$imgURL + item.image"
                 alt="商品图"
-                class="item-image h-full absolute border border-gray-400 rounded-md transition-all transform"
+                class="item-image absolute border border-gray-400 rounded-md transition-all transform"
+                style="height: 233px;width: 175px;"
               />
             </div>
             <div class="p-2 space-x-1 flex flex-col">
