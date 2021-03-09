@@ -45,7 +45,7 @@ import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
 import storage from "store";
 import { addUser } from "@/api/user-manage";
 const defalutForm = {
-  //   avatar: "",
+  avatar: "/images/avatar/avatar.jpg",
   email: "",
   name: "",
   password: "",

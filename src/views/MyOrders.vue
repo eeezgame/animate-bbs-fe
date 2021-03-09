@@ -66,9 +66,7 @@ export default {
     };
   },
   created() {
-    getOrderList(this.listQuery).then(res => {
-      this.items = res.data.records;
-    });
+    this.getOrderList();
   },
   methods: {
     handleReceiptOrder(item) {
@@ -80,10 +78,16 @@ export default {
         .then(result => {
           const { isOk } = { ...result };
           isOk &&
-            receiptOrder({ id: item.id }).then(res => {
-              console.log(res, "res");
+            receiptOrder({ id: item.id }).then(() => {
+              // console.log(res, "res");
+              this.getOrderList();
             });
         });
+    },
+    getOrderList() {
+      getOrderList(this.listQuery).then(res => {
+        this.items = res.data.records;
+      });
     }
   }
 };

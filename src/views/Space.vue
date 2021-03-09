@@ -323,18 +323,18 @@ export default {
         : (this.postCollections = []);
     },
     getFollow() {
-      this.fans = [];
-      getFollow().then(res => {
-        this.fans = res.data;
-      });
-    },
-    getFollowed() {
       this.attentions = [];
-      getFollowed().then(res => {
+      getFollow().then(res => {
         this.attentions = res.data.map(item => {
           this.$set(item, "_isFollowed", true);
           return item;
         });
+      });
+    },
+    getFollowed() {
+      this.fans = [];
+      getFollowed().then(res => {
+        this.fans = res.data;
       });
     },
     follow(item) {

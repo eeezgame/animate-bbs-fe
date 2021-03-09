@@ -91,6 +91,27 @@ export default {
     this.$bus.$on("login-state-change", () => {
       this.loginState = storage.get(LOGIN_STATE) || 0;
       this.userInfo = storage.get(USER_INFO) || null;
+      storage.get(LOGIN_STATE) === 1 &&
+        getInfo()
+          .then(res => {
+            const { avatar, email, id, lastLoginTime, name, phone, points } = {
+              ...res.data
+            };
+            storage.set(USER_INFO, {
+              avatar,
+              email,
+              id,
+              lastLoginTime,
+              name,
+              phone,
+              points
+            });
+          })
+          .catch(() => {
+            storage.set(LOGIN_STATE, 0);
+            storage.remove(USER_INFO);
+            this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+          });
     });
     storage.get(LOGIN_STATE) === 1 &&
       getInfo()

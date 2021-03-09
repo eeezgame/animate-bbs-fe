@@ -49,6 +49,7 @@
             >
             <input
               v-model="fmData.title"
+              autocomplete="off"
               type="text"
               name="title"
               id="title"
@@ -62,6 +63,7 @@
             >
             <input
               v-model="fmData.adopted"
+              autocomplete="off"
               id="adopted"
               name="adopted"
               type="checkbox"
