@@ -1,7 +1,17 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
-
+import NProgress from "nprogress"; // progress bar
+import "@/config/nprogress/index.css";
+NProgress.configure({
+  template: `
+  <div class="bar" role="bar">
+    <div class="peg"><img width="40' height="40" src="${require("@/assets/miku_negi.jpg")}"</div>
+  </div>
+  <div class="spinner" role="spinner">
+    <div class="spinner-icon"></div>
+  </div>`
+});
 Vue.use(VueRouter);
 
 const routes = [
@@ -59,4 +69,11 @@ const router = new VueRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  NProgress.start();
+  next();
+});
+router.afterEach(() => {
+  NProgress.done(); // finish progress bar
+});
 export default router;
