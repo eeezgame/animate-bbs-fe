@@ -21,7 +21,7 @@ import storage from "store";
 import { getPostPlateList } from "@/api/post-plate";
 import { getPostCategoryList } from "@/api/post-category";
 import { MIKU_THEME_NAME, WIFE_THEME_NAME } from "@/config/theme/types.js";
-import Loading from "./modules/Loading";
+// import Loading from "./modules/Loading";
 const PostThemeComponentMap = {
   [MIKU_THEME_NAME]: "MikuPost",
   [WIFE_THEME_NAME]: "WifePost"
@@ -31,9 +31,7 @@ export default {
   inject: ["app"],
   components: {
     MikuPost: () => ({
-      component: import("./themes/Miku.vue"),
-      loading: Loading,
-      delay: 5000
+      component: import("./themes/Miku.vue")
     }),
     WifePost: () => import("./themes/Wife.vue")
   },
