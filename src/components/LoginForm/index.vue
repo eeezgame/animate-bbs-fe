@@ -19,6 +19,9 @@
           >
         </p>
         <form class="px-2 space-y-2">
+          <t-alert variant="error" :show="loginError">
+            {{ loginErrorMsg }}
+          </t-alert>
           <div>
             <input
               v-model="loginForm.phone"
@@ -43,7 +46,7 @@
             class="w-full px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
             @click="login"
           >
-            立即登录
+            {{ loginLoading ? "登录中..." : "立即登录" }}
           </button>
         </p>
       </div>
@@ -62,7 +65,7 @@
             class="w-full px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400 "
             @click="logout"
           >
-            登出
+            {{ loginLoading ? "登出中..." : "登出" }}
           </button>
         </p>
       </div>
@@ -84,7 +87,11 @@ export default {
         password: ""
       },
       loginState: storage.get(LOGIN_STATE) || 0,
-      userInfo: storage.get(USER_INFO) || null
+      userInfo: storage.get(USER_INFO) || null,
+      loginLoading: false,
+      loginError: false,
+      loginErrorMsg: "",
+      logoutLoading: false
     };
   },
   created() {
@@ -138,6 +145,9 @@ export default {
   mounted() {},
   methods: {
     login() {
+      this.loginLoading = true;
+      this.loginError = false;
+      this.loginErrorMsg = "";
       login(this.loginForm)
         .then(res => {
           storage.set(LOGIN_STATE, 1);
@@ -159,13 +169,19 @@ export default {
         })
         .catch(e => {
           console.log(e, "e");
+          this.loginError = true;
+          this.loginErrorMsg = e.message;
           this.loginState = 0;
           storage.set(LOGIN_STATE, 0);
           storage.remove(USER_INFO);
           this.userInfo = storage.get(USER_INFO);
+        })
+        .finally(() => {
+          this.loginLoading = false;
         });
     },
     logout() {
+      this.logoutLoading = true;
       logout()
         .then(() => {
           this.loginState = 0;
@@ -180,6 +196,9 @@ export default {
           storage.remove(USER_INFO);
           this.userInfo = storage.get(USER_INFO);
           this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+        })
+        .finally(() => {
+          this.logoutLoading = false;
         });
     }
   }
