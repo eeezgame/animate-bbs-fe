@@ -29,54 +29,26 @@
             </button>
           </div>
         </div>
-        <div class="md:flex flex-col md:flex-row md:-mx-4 hidden">
+        <div class="md:flex flex-col md:flex-row md:-mx-4 hidden space-x-2">
           <router-link
             v-if="this.loginState === 1"
             to="/shop"
-            class=" text-black hover:text-red-500 font-bold  md:my-0"
+            class=" text-black hover:text-red-500 md:my-0"
             >[积分商城]</router-link
           >
           <router-link
             v-if="this.loginState === 1"
             to="/send-post"
-            class="my-1 px-2 bg-miku-700 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 md:my-0"
+            class="my-0 px-2 bg-miku-700 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 "
             >发帖</router-link
           >
-          <div
+          <t-dropdown
             v-if="this.loginState === 1"
-            class="relative inline-block text-left"
+            :text="userInfo && userInfo.name"
+            variant="text"
+            toggleOnClick
           >
-            <div>
-              <span
-                class="cursor-pointer inline-flex justify-center w-full   text-sm font-medium text-gray-700 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
-                id="options-menu"
-                aria-haspopup="true"
-                aria-expanded="true"
-                v-click-outside="userMenuHiden"
-                @click="userMenuOpen = !userMenuOpen"
-              >
-                {{ this.userInfo.name }}
-                <!-- Heroicon name: solid/chevron-down -->
-                <svg
-                  class="-mr-1 ml-2 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </span>
-            </div>
-
-            <div
-              v-show="userMenuOpen"
-              class="origin-top-right absolute right-0 mt-2 w-32 shadow-lg bg-white"
-            >
+            <div class="py-1 rounded-md shadow-xs" slot-scope="{ hide }">
               <div
                 class="py-1  text-left"
                 role="menu"
@@ -100,13 +72,33 @@
                 <p
                   class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   role="menuitem"
-                  @click="logout"
+                  @click="
+                    hide();
+                    logout();
+                  "
                 >
                   登出
                 </p>
               </div>
             </div>
-          </div>
+          </t-dropdown>
+          <t-dropdown text="[主题]" variant="text" toggleOnClick>
+            <div class="py-1 rounded-md shadow-xs" slot-scope="{ hide }">
+              <a
+                v-for="theme in themes"
+                :key="theme"
+                href="#"
+                class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
+                role="menuitem"
+                @click="
+                  hide();
+                  changeTheme(theme);
+                "
+              >
+                {{ theme }}
+              </a>
+            </div>
+          </t-dropdown>
           <!-- <a
             href="#"
             class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
@@ -120,7 +112,7 @@
         </div>
       </div>
     </nav>
-    <main class="pt-6">
+    <main class="pt-6" :class="[currentTheme]">
       <router-view class="mb-16" />
     </main>
     <footer
@@ -152,20 +144,29 @@
 </template>
 
 <script>
+import { MIKU_THEME_NAME, WIFE_THEME_NAME } from "@/config/theme/types.js";
 import ClickOutside from "vue-click-outside";
-import { LOGIN_STATE, USER_INFO } from "@/store/mutation-types";
+import { LOGIN_STATE, USER_INFO, THEME } from "@/store/mutation-types";
 import storage from "store";
 import { logout } from "@/api/user";
-
+let bodyEl = document.querySelector("body");
+bodyEl && (bodyEl.className = storage.get(THEME) || MIKU_THEME_NAME);
 export default {
   directives: {
     ClickOutside
+  },
+  provide() {
+    return {
+      app: this
+    };
   },
   data() {
     return {
       loginState: storage.get(LOGIN_STATE) || 0,
       userInfo: storage.get(USER_INFO) || null,
-      userMenuOpen: false
+      userMenuOpen: false,
+      currentTheme: storage.get(THEME) || MIKU_THEME_NAME,
+      themes: [MIKU_THEME_NAME, WIFE_THEME_NAME]
     };
   },
   created() {
@@ -194,18 +195,25 @@ export default {
     },
     userMenuHiden() {
       this.userMenuOpen = false;
+    },
+    changeTheme(theme) {
+      storage.set(THEME, theme);
+      this.currentTheme = theme;
+      bodyEl.className = theme;
     }
   }
 };
 </script>
 <style lang="scss">
 body {
-  background: #d2ffee;
   font-family: arial, helvetica, sans-serif;
   color: black;
   font-size: 10pt;
 }
-main {
+body.miku {
+  background: #d2ffee;
+}
+main.miku {
   background: url("./assets/fade-miku.png") top repeat-x;
 }
 </style>
