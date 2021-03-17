@@ -31,19 +31,18 @@
         </div>
         <div class="md:flex flex-col md:flex-row md:-mx-4 hidden space-x-2">
           <router-link
-            v-if="this.loginState === 1"
+            v-if="loginState === 1"
             to="/shop"
             class=" text-black hover:text-red-500 md:my-0"
             >[积分商城]</router-link
           >
           <router-link
-            v-if="this.loginState === 1"
+            v-if="loginState === 1"
             to="/send-post"
             class="my-0 px-2 bg-miku-700 text-gray-100 font-bold hover:bg-miku-400 md:mx-4 "
             >发帖</router-link
           >
           <t-dropdown
-            v-if="this.loginState === 1"
             :text="userInfo && userInfo.name"
             variant="text"
             toggleOnClick
@@ -57,14 +56,14 @@
               >
                 <router-link
                   tag="p"
-                  v-if="this.loginState === 1"
+                  v-if="loginState === 1"
                   to="/my-orders"
                   class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   >我的订单</router-link
                 >
                 <router-link
                   tag="p"
-                  v-if="this.loginState === 1"
+                  v-if="loginState === 1"
                   :to="'/space/' + userInfo.id"
                   class="cursor-pointer hover:bg-gray-100 text-left px-4 py-2 text-sm text-gray-700"
                   >我的空间</router-link
@@ -216,4 +215,12 @@ body.miku {
 main.miku {
   background: url("./assets/fade-miku.png") top repeat-x;
 }
+
+body.wife {
+  background: #d1e1e6;
+}
+/* main.wife {
+  // background: url("./assets/fade-miku.png") top repeat-x;
+  
+} */
 </style>
