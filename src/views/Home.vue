@@ -11,13 +11,14 @@
         <div class="-mx-8 w-4/12 hidden lg:block">
           <login-form></login-form>
           <div class="mt-10 px-8">
+            <img src="../assets/ad.jpg" alt="mikufufu" />
             <!-- <h1 class="mb-4 text-xl font-bold text-gray-700">Recent Post</h1> -->
-            <div
+            <!-- <div
               class="px-8 py-6 max-w-sm mx-auto rounded-sm shadow-md"
               style="background: #B6DDDE;border-color: #8FCCCD;"
             >
               <img src="../assets/ad.jpg" alt="mikufufu" />
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
