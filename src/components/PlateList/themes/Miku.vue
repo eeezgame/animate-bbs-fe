@@ -125,7 +125,7 @@
           </table>
         </div>
         <div
-          v-if="this.plates.length === 0"
+          v-if="plates.length === 0"
           class="h-64 max-w-4xl px-3 py-2 bg-miku-1000 border-miku-1100 rounded-sm shadow-md relative"
         >
           <p

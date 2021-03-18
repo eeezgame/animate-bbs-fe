@@ -1,8 +1,15 @@
 <template>
   <div class="w-full">
-    <t-card class="w-full lg:w-8/12 " v-if="loginState === 1" header="帖子">
+    <div
+      class="h-1 w-full lg:w-8/12 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-full"
+    ></div>
+    <div
+      class="h-1 w-full lg:w-8/12 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+    ></div>
+    <t-card v-if="loginState === 1" class="w-full lg:w-8/12 rounded-t-none">
+      <!-- <div>帖子</div> -->
       <div
-        class="td_bg w-full px-3 py-2 space-x-8 flex border-b-2 border-gray-400"
+        class="bg-gradient-to-b from-white to-gray-100  w-full px-3 py-2 space-x-8 flex border-b-2 border-gray-400"
       >
         <div
           v-for="item in plateOptions"
@@ -12,8 +19,16 @@
             getAllUserPost();
           "
           class="cursor-pointer transform hover:scale-110"
+          :class="[
+            item.id === queryParam.plateId ? 'border-2 border-pink-500' : ''
+          ]"
         >
-          <img src="" alt="" width="190" height="65" />
+          <img
+            :src="$imgURL + item.image"
+            alt=""
+            class="object-cover"
+            style="width:110px;height:70px"
+          />
           <span
             class="p-1 font-bold"
             :class="[
@@ -21,6 +36,7 @@
             ]"
             >{{ item.name }}</span
           >
+          <p class="p-1 text-gray-400">{{ item.remark }}</p>
         </div>
       </div>
       <div class="w-full bg-gray-200 pl-1 py-2 ">
@@ -72,7 +88,7 @@
         <div
           v-for="item in plates"
           :key="item.id"
-          class="max-w-4xl px-3 py-2 td_bg border-gary-400 rounded-sm shadow-md"
+          class="max-w-4xl px-3 py-2 bg-gradient-to-b from-white to-gray-100 border-gary-400 rounded-sm shadow-md"
         >
           <table cellpadding="0" cellspacing="0" border="0" width="100%">
             <tbody>
@@ -130,8 +146,8 @@
           </table>
         </div>
         <div
-          v-if="this.plates.length === 0"
-          class="h-64 max-w-4xl px-3 py-2 bg-miku-1000 border-miku-1100 rounded-sm shadow-md relative"
+          v-if="plates.length === 0"
+          class="h-64 max-w-4xl px-3 py-2 border-miku-1100 rounded-sm shadow-md relative"
         >
           <p
             class="w-full text-center absolute transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
@@ -153,27 +169,27 @@
           "
         />
       </div>
-      <div
-        v-if="loginState === 0"
-        class="w-full lg:w-8/12 h-64 max-w-4xl px-3 py-2 bg-miku-1000 border-miku-1100 rounded-sm shadow-md relative"
-      >
-        <p
-          class="w-full text-center absolute transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
-        >
-          请先登录
-        </p>
-      </div>
-      <div
-        v-if="loginState === 2"
-        class="w-full lg:w-8/12 h-64 max-w-4xl px-3 py-2 bg-miku-1000 border-miku-1100 rounded-sm shadow-md relative"
-      >
-        <p
-          class="w-full text-center absolute transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
-        >
-          违规账号
-        </p>
-      </div>
     </t-card>
+    <t-card
+      v-if="loginState === 0"
+      class="w-full lg:w-8/12 h-64 max-w-4xl rounded-sm shadow-md relative"
+    >
+      <p
+        class="w-full text-center absolute transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
+      >
+        请先登录
+      </p>
+    </t-card>
+    <div
+      v-if="loginState === 2"
+      class="w-full lg:w-8/12 h-64 max-w-4xl rounded-sm shadow-md relative"
+    >
+      <p
+        class="w-full text-center absolute transform translate-x-1/2 translate-y-1/2 right-1/2 top-1/2"
+      >
+        违规账号
+      </p>
+    </div>
   </div>
 </template>
 
@@ -240,11 +256,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.td_bg {
-  background-color: #fff;
-  background-image: url(http://www.aqours.today/xz/static/styleimg/alice/td_bg.png);
-  background-position: 0 100%;
-  background-repeat: repeat-x;
-}
-</style>
+<style scoped></style>
