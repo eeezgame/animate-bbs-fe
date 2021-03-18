@@ -206,7 +206,8 @@
                 v-if="
                   postInfo.adopted !== 3 &&
                     postInfo.adopted === 1 &&
-                    userInfo.id !== item.userId
+                    userInfo.id !== item.userId &&
+                    userInfo.id === postInfo.userId
                 "
                 class="float-right cursor-pointer hover:text-red-500"
                 @click="handleAdopt(item.id)"
