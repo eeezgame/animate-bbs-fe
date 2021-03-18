@@ -83,10 +83,9 @@
           </t-dropdown>
           <t-dropdown text="[主题]" variant="text" toggleOnClick>
             <div class="py-1 rounded-md shadow-xs" slot-scope="{ hide }">
-              <a
+              <span
                 v-for="theme in themes"
                 :key="theme"
-                href="#"
                 class="block px-4 py-2 text-sm leading-5 text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
                 role="menuitem"
                 @click="
@@ -95,7 +94,7 @@
                 "
               >
                 {{ theme }}
-              </a>
+              </span>
             </div>
           </t-dropdown>
           <!-- <a
