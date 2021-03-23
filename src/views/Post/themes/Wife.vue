@@ -1,10 +1,8 @@
 <template>
   <div class="mb-12" style="">
     <reply-drawer ref="relpyDrawer" @on-submit="replyPost"></reply-drawer>
-    <div
-      class="p-2 sm:w-11/12 md:w-8/12 lg:w-6/12 mx-auto divide-y-2 divide-miku-900 divide-dotted"
-    >
-      <div class="py-2">
+    <div class="p-2 sm:w-11/12 md:w-10/12 lg:w-8/12 mx-auto ">
+      <t-card class="py-2 mb-16">
         <p class="">
           <span
             class="h-6 w-6 cursor-pointer float-right"
@@ -120,111 +118,146 @@
             <div v-html="postInfo.postContent"></div>
           </div>
         </div>
-      </div>
-      <div
-        class="p-2 border-miku-1100 relative"
-        :class="[item.adopted === 1 ? 'bg-yellow-100' : 'bg-white']"
-        v-for="item in postReplyList"
-        :key="item.id"
-      >
-        <p v-if="item.adopted === 1" class="absolute -top-6 -right-4 ">
-          <img
-            class="w-8 h-8 transform rotate-45"
-            src="@/assets/miku_happy.png"
-            alt="已采纳"
-          />
-        </p>
-        <p v-if="item.adopted === 1" class="font-bold text-lg">🏅最佳回复</p>
-        <div class="flex w-full">
-          <div class="h-16 w-16 ">
-            <popper
-              trigger="hover"
-              :options="{
-                placement: 'top-start',
-                modifiers: { offset: { offset: '2rem,1rem' } }
-              }"
-              @show="onFloorUserCardShow(item)"
-            >
-              <div class="popper">
-                <t-card>
-                  <div style="width: 300px" class="flex">
-                    <img
-                      :src="$imgURL + item.user.avatar"
-                      :alt="item.user.name"
-                      class="h-10 w-10 rounded-full"
-                    />
-                    <div
-                      style="height: 100px"
-                      class="w-full text-left px-2 space-y-2"
-                    >
-                      <p>
-                        <span
-                          class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
-                        >
-                          {{ item.user.name }}
-                        </span>
-                      </p>
-                      <p>
-                        <button
-                          v-if="!item._isFollowed"
-                          class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400"
-                          @click="followLouxia(item)"
-                        >
-                          关注
-                        </button>
-                        <button
-                          v-else
-                          class="w-32 px-2 py-1 bg-gray-500 text-gray-100 font-bold rounded"
-                          @click="cancelFollowLouxia(item)"
-                        >
-                          取消关注
-                        </button>
-                      </p>
-                    </div>
-                  </div>
-                </t-card>
-              </div>
+      </t-card>
+      <template v-for="item in postReplyList">
+        <div
+          class="h-1 w-full bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-full"
+          :key="item.id"
+        ></div>
+        <div
+          class="h-1 w-full bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+          :key="item.id"
+        ></div>
+        <t-card
+          class="relative mb-3"
+          :class="[item.adopted === 1 ? 'bg-yellow-100' : 'bg-white']"
+          :key="item.id"
+        >
+          <p v-if="item.adopted === 1" class="absolute -top-6 -right-4 ">
+            <img
+              class="w-8 h-8 transform rotate-45"
+              src="@/assets/miku_happy.png"
+              alt="已采纳"
+            />
+          </p>
+          <p v-if="item.adopted === 1" class="mb-2">
+            <span class="font-bold text-lg">🏅最佳回复 </span
+            ><span>Yes,I am!</span>
+          </p>
 
-              <span slot="reference">
-                <img :src="$imgURL + item.user.avatar" :alt="item.user.name" />
-              </span>
-            </popper>
-          </div>
-          <div class="px-2 w-full">
-            <div>
-              <span
-                class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+          <div class="flex w-full " style="min-height:408px;">
+            <div
+              class="border-r border-dashed border-indigo-300"
+              style="width:200px;"
+            >
+              <popper
+                trigger="hover"
+                :options="{
+                  placement: 'top-start',
+                  modifiers: { offset: { offset: '2rem,1rem' } }
+                }"
+                @show="onFloorUserCardShow(item)"
               >
-                {{ item.user.name }}
-              </span>
-              <span class="float-right">#{{ item.floor }}</span>
+                <div class="popper">
+                  <t-card>
+                    <div style="width: 300px" class="flex">
+                      <img
+                        :src="$imgURL + item.user.avatar"
+                        :alt="item.user.name"
+                        class="h-10 w-10 rounded-full"
+                      />
+                      <div
+                        style="height: 100px"
+                        class="w-full text-left px-2 space-y-2"
+                      >
+                        <p>
+                          <span
+                            class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+                          >
+                            {{ item.user.name }}
+                          </span>
+                        </p>
+                        <p>
+                          <button
+                            v-if="!item._isFollowed"
+                            class="w-16 px-2 py-1 bg-miku-700 text-gray-100 font-bold rounded hover:bg-miku-400"
+                            @click="followLouxia(item)"
+                          >
+                            关注
+                          </button>
+                          <button
+                            v-else
+                            class="w-32 px-2 py-1 bg-gray-500 text-gray-100 font-bold rounded"
+                            @click="cancelFollowLouxia(item)"
+                          >
+                            取消关注
+                          </button>
+                        </p>
+                      </div>
+                    </div>
+                  </t-card>
+                </div>
+
+                <template slot="reference">
+                  <img
+                    class="w-16 h-16 mx-auto"
+                    :src="$imgURL + item.user.avatar"
+                    :alt="item.user.name"
+                  />
+                </template>
+              </popper>
+              <div />
+              <div
+                class="mx-2 p-1 border border-indigo-200 bg-gray-100 space-y-1 "
+              >
+                <p
+                  class=" font-bold text-lg text-blue-600 hover:underline cursor-pointer"
+                >
+                  {{ item.user.name }}
+                </p>
+
+                <p class="">UID:{{ item.userId }}</p>
+                <pet-dio></pet-dio>
+                <p>今日的心情:</p>
+                <p>赛高尼,high！</p>
+              </div>
             </div>
-            <div class="pl-4 py-1" v-html="item.content"></div>
-            <div class="text-sm">
-              <span class="text-gray-500">{{ item.createTime }}</span>
-              <span
-                v-if="
-                  postInfo.adopted !== 3 &&
-                    postInfo.adopted === 1 &&
-                    userInfo.id !== item.userId &&
-                    userInfo.id === postInfo.userId
-                "
-                class="float-right cursor-pointer hover:text-red-500"
-                @click="handleAdopt(item.id)"
-                >[采纳]</span
-              >
-              <span
-                class="float-right cursor-pointer hover:text-red-500"
-                @click="
-                  item.liked ? replyCancelLike(item.id) : replyLike(item.id)
-                "
-                >[{{ item.liked ? "已点赞" : "点赞" }}
-                {{ item.likeNums > 0 ? item.likeNums : "" }}]</span
-              >
+            <div class="px-2 w-full">
+              <div>
+                <span
+                  class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
+                >
+                  {{ item.user.name }}
+                </span>
+                <span class="float-right">#{{ item.floor }}</span>
+              </div>
+              <div class="pl-4 py-1" v-html="item.content"></div>
+              <div class="text-sm">
+                <span class="text-gray-500">{{ item.createTime }}</span>
+                <span
+                  v-if="
+                    postInfo.adopted !== 3 &&
+                      postInfo.adopted === 1 &&
+                      userInfo.id !== item.userId &&
+                      userInfo.id === postInfo.userId
+                  "
+                  class="float-right cursor-pointer hover:text-red-500"
+                  @click="handleAdopt(item.id)"
+                  >[采纳]</span
+                >
+                <span
+                  class="float-right cursor-pointer hover:text-red-500"
+                  @click="
+                    item.liked ? replyCancelLike(item.id) : replyLike(item.id)
+                  "
+                  >[{{ item.liked ? "已点赞" : "点赞" }}
+                  {{ item.likeNums > 0 ? item.likeNums : "" }}]</span
+                >
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </t-card>
+      </template>
     </div>
   </div>
 </template>
@@ -234,10 +267,12 @@ import { replyPost } from "@/api/post";
 import ReplyDrawer from "@/components/ReplyDrawer";
 import Popper from "vue-popperjs";
 import "vue-popperjs/dist/vue-popper.css";
+import PetDio from "@/components/Pets/Dio.vue";
 export default {
   components: {
     ReplyDrawer,
-    Popper
+    Popper,
+    PetDio
   },
   props: [
     "postInfo",
@@ -275,3 +310,19 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.wife-post:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  /* background-image: url(jpg); */
+  background-repeat: repeat;
+  background-position: center bottom;
+  filter: opacity(25%);
+}
+</style>
