@@ -2,7 +2,7 @@
   <div class="mb-12" style="">
     <reply-drawer ref="relpyDrawer" @on-submit="replyPost"></reply-drawer>
     <div class="p-2 sm:w-11/12 md:w-10/12 lg:w-8/12 mx-auto ">
-      <t-card class="py-2 mb-16">
+      <t-card class="py-2 mb-16" style="min-height:308px;">
         <p class="">
           <span
             class="h-6 w-6 cursor-pointer float-right"
@@ -122,14 +122,14 @@
       <template v-for="item in postReplyList">
         <div
           class="h-1 w-full bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 rounded-t-full"
-          :key="item.id"
+          :key="item.id + 'bar1'"
         ></div>
         <div
           class="h-1 w-full bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
-          :key="item.id"
+          :key="item.id + '-bar2'"
         ></div>
         <t-card
-          class="relative mb-3"
+          class="relative mb-3 wife-post bg-opacity-50"
           :class="[item.adopted === 1 ? 'bg-yellow-100' : 'bg-white']"
           :key="item.id"
         >
@@ -208,7 +208,7 @@
               </popper>
               <div />
               <div
-                class="mx-2 p-1 border border-indigo-200 bg-gray-100 space-y-1 "
+                class="mt-2 mx-2 p-1 border border-indigo-200 bg-gray-100 space-y-1 "
               >
                 <p
                   class=" font-bold text-lg text-blue-600 hover:underline cursor-pointer"
@@ -216,13 +216,15 @@
                   {{ item.user.name }}
                 </p>
 
-                <p class="">UID:{{ item.userId }}</p>
+                <p class="overflow-hidden whitespace-nowrap overflow-ellipsis">
+                  UID:{{ item.userId }}
+                </p>
                 <pet-dio></pet-dio>
                 <p>今日的心情:</p>
                 <p>赛高尼,high！</p>
               </div>
             </div>
-            <div class="px-2 w-full">
+            <div class="px-2 w-full flex flex-col">
               <div>
                 <span
                   class="cursor-pointer text-miku-700 hover:text-miku-400 font-bold text-lg"
@@ -232,7 +234,7 @@
                 <span class="float-right">#{{ item.floor }}</span>
               </div>
               <div class="pl-4 py-1" v-html="item.content"></div>
-              <div class="text-sm">
+              <div class="text-sm mt-auto">
                 <span class="text-gray-500">{{ item.createTime }}</span>
                 <span
                   v-if="
@@ -320,9 +322,8 @@ export default {
   left: 0;
   bottom: 0;
   right: 0;
-  /* background-image: url(jpg); */
+  background-image: url(../../../assets/wife.webp);
   background-repeat: repeat;
-  background-position: center bottom;
   filter: opacity(25%);
 }
 </style>
