@@ -12,7 +12,7 @@
       >
         <div class="flex justify-between items-center">
           <div>
-            <router-link to="/" class="text-gray-800 hover:text-red-500 text-sm"
+            <router-link to="/" class="text-gray-800 hover:text-pink-500 text-sm"
               >首页</router-link
             >
           </div>
@@ -33,7 +33,7 @@
           <router-link
             v-if="loginState === 1"
             to="/shop"
-            class=" text-black hover:text-red-500 md:my-0"
+            class=" text-black hover:text-pink-500 md:my-0"
             >[积分商城]</router-link
           >
           <router-link
@@ -97,16 +97,6 @@
               </span>
             </div>
           </t-dropdown>
-          <!-- <a
-            href="#"
-            class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
-            >User</a
-          >
-          <a
-            href="#"
-            class="my-1 text-gray-800 hover:text-red-500 md:mx-4 md:my-0"
-            >Theme</a
-          > -->
         </div>
       </div>
     </nav>
@@ -124,9 +114,9 @@
           class="w-4 h-4 inline-block"
         />
         <p class="divide-x divide-gray-400">
-          <a href="#" class="text-blue-600 no-underline px-1">首页版规</a>
-          <a href="/" class="text-blue-600 no-underline px-1">微博</a>
-          <a href="/" class="text-blue-600 no-underline px-1">知乎</a>
+          <a href="#" class="text-blue-600 hover:text-pink-500 no-underline px-1">首页版规</a>
+          <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">微博</a>
+          <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">知乎</a>
         </p>
       </div>
       <div class="flex items-end">
@@ -135,7 +125,7 @@
           alt=""
           class="w-4 h-4 inline-block"
         />
-        <a href="/" class="text-blue-600 no-underline px-1">联系站长</a>
+        <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">联系站长</a>
       </div>
     </footer>
   </div>

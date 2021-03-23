@@ -41,7 +41,7 @@
       <template v-if="!items.length" v-slot:tbody="props">
         <tbody :class="props.tbodyClass">
           <tr :class="[props.trClass, 'text-center']">
-            <td :class="props.tdClass" colspan="4">
+            <td :class="props.tdClass" colspan="5">
               暂无数据
             </td>
           </tr>
