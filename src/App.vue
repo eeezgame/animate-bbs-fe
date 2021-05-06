@@ -12,7 +12,9 @@
       >
         <div class="flex justify-between items-center">
           <div>
-            <router-link to="/" class="text-gray-800 hover:text-pink-500 text-sm"
+            <router-link
+              to="/"
+              class="text-gray-800 hover:text-pink-500 text-sm"
               >首页</router-link
             >
           </div>
@@ -114,9 +116,21 @@
           class="w-4 h-4 inline-block"
         />
         <p class="divide-x divide-gray-400">
-          <a href="#" class="text-blue-600 hover:text-pink-500 no-underline px-1">首页版规</a>
-          <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">微博</a>
-          <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">知乎</a>
+          <a
+            href="#"
+            class="text-blue-600 hover:text-pink-500 no-underline px-1"
+            >首页版规</a
+          >
+          <a
+            href="/"
+            class="text-blue-600 hover:text-pink-500 no-underline px-1"
+            >微博</a
+          >
+          <a
+            href="/"
+            class="text-blue-600 hover:text-pink-500 no-underline px-1"
+            >知乎</a
+          >
         </p>
       </div>
       <div class="flex items-end">
@@ -125,7 +139,9 @@
           alt=""
           class="w-4 h-4 inline-block"
         />
-        <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1">联系站长</a>
+        <a href="/" class="text-blue-600 hover:text-pink-500 no-underline px-1"
+          >联系站长</a
+        >
       </div>
     </footer>
   </div>
@@ -136,7 +152,7 @@ import { MIKU_THEME_NAME, WIFE_THEME_NAME } from "@/config/theme/types.js";
 import ClickOutside from "vue-click-outside";
 import { LOGIN_STATE, USER_INFO, THEME } from "@/store/mutation-types";
 import storage from "store";
-import { logout } from "@/api/user";
+import { getInfo, logout } from "@/api/user";
 let bodyEl = document.querySelector("body");
 bodyEl && (bodyEl.className = storage.get(THEME) || MIKU_THEME_NAME);
 export default {
@@ -181,13 +197,50 @@ export default {
           this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
         });
     },
-    userMenuHiden() {
-      this.userMenuOpen = false;
-    },
     changeTheme(theme) {
       storage.set(THEME, theme);
       this.currentTheme = theme;
       bodyEl.className = theme;
+    },
+    updateUserInfo() {
+      storage.get(LOGIN_STATE) === 1 &&
+        getInfo()
+          .then(res => {
+            const {
+              avatar,
+              deleted,
+              email,
+              id,
+              lastLoginTime,
+              name,
+              password,
+              phone,
+              points,
+              roleId,
+              status
+            } = {
+              ...res.data
+            };
+            storage.set(USER_INFO, {
+              avatar,
+              deleted,
+              email,
+              id,
+              lastLoginTime,
+              name,
+              password,
+              phone,
+              points,
+              roleId,
+              status
+            });
+            this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+          })
+          .catch(() => {
+            storage.set(LOGIN_STATE, 0);
+            storage.remove(USER_INFO);
+            this.$bus.$emit("login-state-change", storage.get(LOGIN_STATE));
+          });
     }
   }
 };
@@ -210,6 +263,6 @@ body.wife {
 }
 /* main.wife {
   // background: url("./assets/fade-miku.png") top repeat-x;
-  
+
 } */
 </style>

@@ -33,10 +33,10 @@
           </p>
           <div class="mx-auto flex" style="width: 300px;">
             <span class="flex-1 text-center cursor-pointer hover:text-red-500"
-              >关注:{{ fans.length }}</span
+              >关注:{{ attentions.length }}</span
             >
             <span class="flex-1 text-center cursor-pointer hover:text-red-500"
-              >粉丝:{{ attentions.length }}</span
+              >粉丝:{{ fans.length }}</span
             >
             <span class="flex-1 text-center">积分:{{ userInfo.points }}</span>
           </div>

@@ -63,17 +63,33 @@ export default {
       storage.get(LOGIN_STATE) === 1 &&
         getInfo()
           .then(res => {
-            const { avatar, email, id, lastLoginTime, name, phone, points } = {
-              ...res.data
-            };
-            storage.set(USER_INFO, {
+            const {
               avatar,
+              deleted,
               email,
               id,
               lastLoginTime,
               name,
+              password,
               phone,
-              points
+              points,
+              roleId,
+              status
+            } = {
+              ...res.data
+            };
+            storage.set(USER_INFO, {
+              avatar,
+              deleted,
+              email,
+              id,
+              lastLoginTime,
+              name,
+              password,
+              phone,
+              points,
+              roleId,
+              status
             });
           })
           .catch(() => {
@@ -85,17 +101,33 @@ export default {
     storage.get(LOGIN_STATE) === 1 &&
       getInfo()
         .then(res => {
-          const { avatar, email, id, lastLoginTime, name, phone, points } = {
-            ...res.data
-          };
-          storage.set(USER_INFO, {
+          const {
             avatar,
+            deleted,
             email,
             id,
             lastLoginTime,
             name,
+            password,
             phone,
-            points
+            points,
+            roleId,
+            status
+          } = {
+            ...res.data
+          };
+          storage.set(USER_INFO, {
+            avatar,
+            deleted,
+            email,
+            id,
+            lastLoginTime,
+            name,
+            password,
+            phone,
+            points,
+            roleId,
+            status
           });
         })
         .catch(() => {
